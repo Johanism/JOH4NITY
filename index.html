@@ -1,0 +1,3769 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#0a0c14" id="metaThemeColor">
+    <meta name="description" content="Joh4nity — Portal & Browser pribadi dengan koleksi link cerdas.">
+    
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Favicon Gold Crown J -->
+    <link rel="icon" type="image" href="icon-rb.png">
+    <link rel="apple-touch-icon" href="icon.png">
+    <link rel="mask-icon" href="icon.png" color="#D4AF37">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Joh4nity">
+    
+    <title>Joh4nity — Portal & Browser</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    
+    <style>
+        * { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+        
+        /* ============ THEME VARIABLES — GOLD DEFAULT ============ */
+        :root {
+            --accent-1: #B8860B;
+            --accent-2: #8B6508;
+            --accent-hover-1: #D4AF37;
+            --accent-hover-2: #B8860B;
+            --accent-glow: rgba(212, 175, 55, 0.4);
+            --accent-text: #F5D77A;
+            --accent-border: rgba(212, 175, 55, 0.35);
+            
+            --bg-base: #0b0d10;
+            --bg-grad-1: #14181f;
+            --bg-grad-2: #0a0c0f;
+            --bg-card: rgba(22, 26, 32, 0.75);
+            --bg-card-hover: rgba(28, 34, 44, 0.85);
+            --bg-input: rgba(30, 41, 59, 0.6);
+            --bg-panel: rgba(15, 17, 22, 0.9);
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border-color: rgba(255, 255, 255, 0.05);
+            --border-hover: rgba(255, 255, 255, 0.1);
+        }
+        
+        html[data-theme="light"] {
+            --bg-base: #f1f5f9;
+            --bg-grad-1: #e2e8f0;
+            --bg-grad-2: #f8fafc;
+            --bg-card: rgba(255, 255, 255, 0.85);
+            --bg-card-hover: rgba(255, 255, 255, 0.95);
+            --bg-input: rgba(241, 245, 249, 0.9);
+            --bg-panel: rgba(255, 255, 255, 0.95);
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --border-color: rgba(0, 0, 0, 0.08);
+            --border-hover: rgba(0, 0, 0, 0.15);
+            --accent-text: #B8860B;
+        }
+        
+        html { transition: background 0.4s ease; }
+        
+        body {
+            background: var(--bg-base);
+            color: var(--text-primary);
+            transition: background 0.4s ease, color 0.4s ease;
+            overflow-x: hidden;
+        }
+        
+        .bg-soft-dark { 
+            background: radial-gradient(circle at 20% 30%, var(--bg-grad-1), var(--bg-grad-2) 80%);
+            transition: background 0.4s ease;
+        }
+        
+        /* ============ HIDDEN SCROLLBAR (still scrollable) ============ */
+        * {
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE/Edge */
+        }
+        *::-webkit-scrollbar {
+            display: none; /* Chrome/Safari/Edge */
+            width: 0;
+            height: 0;
+        }
+        html, body {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        html::-webkit-scrollbar,
+        body::-webkit-scrollbar {
+            display: none;
+            width: 0;
+            height: 0;
+        }
+        
+        /* ============ PARTICLES ============ */
+        .particles-bg {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .particle {
+            position: absolute;
+            width: 4px; height: 4px;
+            border-radius: 50%;
+            background: var(--accent-text);
+            opacity: 0.15;
+            animation: floatParticle 20s infinite linear;
+        }
+        @keyframes floatParticle {
+            0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+            10% { opacity: 0.3; }
+            90% { opacity: 0.3; }
+            100% { transform: translateY(-100vh) translateX(100px); opacity: 0; }
+        }
+        
+        .content-wrap { position: relative; z-index: 1; }
+        
+        /* ============ MODERN HEADER ============ */
+        .modern-header {
+            position: relative;
+            width: 100%;
+            margin-bottom: 24px;
+            padding: 14px 20px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, 
+                rgba(22, 26, 32, 0.75), 
+                rgba(15, 17, 22, 0.85));
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            box-shadow: 
+                0 10px 40px -10px rgba(0, 0, 0, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            overflow: hidden;
+            animation: headerSlideDown 0.6s cubic-bezier(0.2, 0.9, 0.4, 1);
+        }
+        
+        @keyframes headerSlideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .modern-header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            padding: 1px;
+            background: linear-gradient(135deg, 
+                transparent 0%, 
+                var(--accent-text) 50%, 
+                transparent 100%);
+            background-size: 200% 200%;
+            -webkit-mask: 
+                linear-gradient(#000 0 0) content-box, 
+                linear-gradient(#000 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            animation: borderFlow 4s linear infinite;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        
+        @keyframes borderFlow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+        
+        .modern-header::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -10%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, var(--accent-glow), transparent 70%);
+            opacity: 0.3;
+            pointer-events: none;
+            animation: ambientFloat 8s ease-in-out infinite;
+        }
+        
+        @keyframes ambientFloat {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(40px, 20px); }
+        }
+        
+        .header-inner {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+        
+        /* ============ BRAND LOGO ============ */
+        .brand-wrap {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        .brand-wrap:hover { transform: scale(1.03); }
+        
+        .brand-logo-wrap {
+            position: relative;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .brand-logo-wrap::before {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: 14px;
+            background: conic-gradient(from 0deg, 
+                transparent, 
+                var(--accent-hover-1), 
+                transparent 30%, 
+                transparent 70%, 
+                var(--accent-hover-1), 
+                transparent);
+            animation: rotateGlow 3s linear infinite;
+            opacity: 0.7;
+        }
+        
+        @keyframes rotateGlow {
+            to { transform: rotate(360deg); }
+        }
+        
+        .brand-logo-wrap::after {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: 14px;
+            background: var(--bg-card);
+            z-index: -1;
+        }
+        
+        .brand-logo {
+            width: 36px;
+            height: 36px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 10px var(--accent-glow));
+            z-index: 1;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        .brand-wrap:hover .brand-logo {
+            transform: rotate(-8deg) scale(1.1);
+        }
+        
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1;
+        }
+        
+        .brand-name {
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #F5D77A, #D4AF37, #B8860B, #D4AF37);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: goldShimmer 3s linear infinite;
+        }
+        
+        .brand-tag {
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+        
+        /* ============ HEADER ACTIONS ============ */
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .icon-btn {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            overflow: hidden;
+        }
+        
+        .icon-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, var(--accent-glow), transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .icon-btn:hover {
+            color: var(--accent-text);
+            border-color: var(--accent-border);
+            transform: translateY(-3px);
+            box-shadow: 
+                0 10px 25px -8px var(--accent-glow),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+        
+        .icon-btn:hover::before { opacity: 0.5; }
+        .icon-btn:active { transform: translateY(-1px) scale(0.95); }
+        
+        .icon-btn i,
+        .icon-btn iconify-icon {
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s ease;
+        }
+        
+        .icon-btn:hover i { transform: scale(1.15); }
+        
+        .icon-btn[data-tip]::after {
+            content: attr(data-tip);
+            position: absolute;
+            bottom: -34px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-6px);
+            background: var(--bg-panel);
+            border: 1px solid var(--accent-border);
+            color: var(--text-primary);
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 500;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.25s ease;
+            box-shadow: 0 8px 20px -6px rgba(0,0,0,0.5);
+            z-index: 100;
+        }
+        
+        .icon-btn[data-tip]:hover::after {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        
+        .browser-btn {
+            width: auto;
+            padding: 0 14px;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .browser-btn i { color: var(--accent-text); }
+        
+        .add-btn-modern {
+            position: relative;
+            height: 40px;
+            padding: 0 18px;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #0a0c14;
+            background: linear-gradient(135deg, #F5D77A, #D4AF37, #B8860B);
+            background-size: 200% auto;
+            border: none;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation: goldShimmer 3s linear infinite, addPulse 2.5s ease-in-out infinite;
+            box-shadow: 
+                0 8px 20px -6px rgba(212, 175, 55, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+        
+        @keyframes addPulse {
+            0%, 100% { box-shadow: 0 8px 20px -6px rgba(212, 175, 55, 0.5), inset 0 1px 0 rgba(255,255,255,0.3); }
+            50% { box-shadow: 0 8px 28px -4px rgba(212, 175, 55, 0.8), inset 0 1px 0 rgba(255,255,255,0.3); }
+        }
+        
+        .add-btn-modern::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.5), 
+                transparent);
+            transition: left 0.6s ease;
+        }
+        
+        .add-btn-modern:hover::before { left: 100%; }
+        
+        .add-btn-modern:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 
+                0 15px 30px -6px rgba(212, 175, 55, 0.7),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
+        }
+        
+        .add-btn-modern:active { transform: translateY(-1px) scale(0.98); }
+        
+        .add-btn-modern i {
+            position: relative;
+            z-index: 1;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        .add-btn-modern:hover i { transform: rotate(90deg); }
+        
+        /* ============ MODERN SEARCH BAR ============ */
+        .search-bar-wrap {
+            position: relative;
+            flex: 1;
+            border-radius: 16px;
+            padding: 1px;
+            background: linear-gradient(135deg, 
+                var(--border-color), 
+                transparent 40%, 
+                transparent 60%, 
+                var(--accent-border));
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        .search-bar-wrap:focus-within {
+            background: linear-gradient(135deg, 
+                var(--accent-text), 
+                var(--accent-hover-1) 40%, 
+                var(--accent-hover-2) 60%, 
+                var(--accent-text));
+            box-shadow: 
+                0 0 0 4px var(--accent-glow),
+                0 15px 40px -10px var(--accent-glow);
+        }
+        
+        .search-bar-inner {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            border-radius: 15px;
+            background: var(--bg-input);
+            backdrop-filter: blur(12px);
+            transition: background 0.3s ease;
+        }
+        
+        .search-bar-wrap:focus-within .search-bar-inner {
+            background: var(--bg-card-hover);
+        }
+        
+        .search-icon-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            background: var(--accent-glow);
+            color: var(--accent-text);
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .search-bar-wrap:focus-within .search-icon-wrap {
+            background: linear-gradient(135deg, var(--accent-hover-1), var(--accent-1));
+            color: #0a0c14;
+            transform: rotate(-8deg) scale(1.05);
+            box-shadow: 0 4px 12px -2px var(--accent-glow);
+        }
+        
+        .search-input-new {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+            padding: 0;
+            min-width: 0;
+        }
+        
+        .search-input-new::placeholder {
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+        
+        .search-shortcut {
+            display: none;
+            align-items: center;
+            gap: 3px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            background: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--text-muted);
+            flex-shrink: 0;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 0.3px;
+        }
+        
+        .search-shortcut kbd {
+            font-family: inherit;
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--text-secondary);
+        }
+        
+        @media (min-width: 640px) {
+            .search-shortcut { display: inline-flex; }
+        }
+        
+        /* ============ MODERN ACTION BUTTONS (History/Game) ============ */
+        .action-btn-new {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 16px;
+            border-radius: 14px;
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            white-space: nowrap;
+        }
+        
+        .action-btn-new::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, var(--accent-glow), transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .action-btn-new:hover {
+            border-color: var(--accent-border);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px -8px var(--accent-glow);
+            color: var(--accent-text);
+        }
+        
+        .action-btn-new:hover::before { opacity: 0.4; }
+        .action-btn-new:active { transform: translateY(-1px) scale(0.97); }
+        
+        .action-btn-new i,
+        .action-btn-new span {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .action-btn-new i {
+            color: var(--accent-text);
+            font-size: 18px;
+            transition: transform 0.3s ease;
+        }
+        
+        .action-btn-new:hover i {
+            transform: scale(1.15);
+        }
+        
+        /* ============ MODERN GLASS CARD (LINK CARD) ============ */
+        .glass-card {
+            position: relative;
+            background: var(--bg-card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            box-shadow: 
+                0 10px 30px -10px rgba(0, 0, 0, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.03);
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1);
+            overflow: hidden;
+        }
+        
+        /* Animated gradient border on hover */
+        .glass-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            padding: 1px;
+            background: linear-gradient(135deg, 
+                transparent 0%, 
+                var(--accent-text) 50%, 
+                transparent 100%);
+            background-size: 200% 200%;
+            -webkit-mask: 
+                linear-gradient(#000 0 0) content-box, 
+                linear-gradient(#000 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            animation: borderFlow 3s linear infinite;
+            pointer-events: none;
+        }
+        
+        .glass-card:hover::after { opacity: 1; }
+        
+        /* Radial mouse follow glow */
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), var(--accent-glow), transparent 60%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .glass-card:hover::before { opacity: 0.2; }
+        
+        .glass-card:hover {
+            background: var(--bg-card-hover);
+            transform: translateY(-6px) scale(1.01);
+            box-shadow: 
+                0 25px 60px -15px var(--accent-glow),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        }
+        
+        .glass-card:active { transform: translateY(-3px) scale(1.005); }
+        
+        /* Card content wrapper (z-index above glow) */
+        .glass-card > *:not(.notes-popup):not(.notes-indicator) {
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* ============ MODERN LINK CARD (specific) ============ */
+        .link-card {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .link-card-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+        }
+        
+        .link-card-info {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-width: 0;
+            flex: 1;
+        }
+        
+        .link-icon-box {
+            position: relative;
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--bg-input), var(--bg-panel));
+            border: 1px solid var(--border-color);
+            flex-shrink: 0;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        .link-card:hover .link-icon-box {
+            border-color: var(--accent-border);
+            transform: scale(1.08) rotate(-3deg);
+            box-shadow: 0 8px 20px -6px var(--accent-glow);
+        }
+        
+        .link-icon-box::before {
+            content: '';
+            position: absolute;
+            inset: -50%;
+            background: conic-gradient(from 0deg, 
+                transparent, var(--accent-glow), transparent 30%);
+            animation: rotateGlow 4s linear infinite;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        
+        .link-card:hover .link-icon-box::before { opacity: 0.6; }
+        
+        .link-icon-box > * {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .link-title-wrap {
+            min-width: 0;
+            flex: 1;
+        }
+        
+        .link-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.25;
+            margin-bottom: 3px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .link-url {
+            font-size: 11px;
+            color: var(--text-muted);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .link-url::before {
+            content: '';
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: #10b981;
+            box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+            flex-shrink: 0;
+        }
+        
+        .link-card-actions {
+            display: flex;
+            gap: 4px;
+            opacity: 0;
+            transform: translateX(8px);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            flex-shrink: 0;
+        }
+        
+        .link-card:hover .link-card-actions {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .link-action-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        .link-action-btn:hover {
+            background: var(--accent-glow);
+            border-color: var(--accent-border);
+            color: var(--accent-text);
+            transform: translateY(-2px) scale(1.08);
+        }
+        
+        .link-action-btn.delete-btn:hover {
+            background: rgba(244, 63, 94, 0.15);
+            border-color: rgba(244, 63, 94, 0.4);
+            color: #fb7185;
+        }
+        
+        .link-card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 12px;
+            border-top: 1px solid var(--border-color);
+            margin-top: auto;
+        }
+        
+        .link-open-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            letter-spacing: 0.3px;
+            transition: all 0.3s ease;
+        }
+        
+        .link-card:hover .link-open-label {
+            color: var(--accent-text);
+        }
+        
+        .link-caret {
+            color: var(--text-muted);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        .link-card:hover .link-caret {
+            color: var(--accent-text);
+            transform: translateX(4px);
+        }
+        
+        /* ============ OVERLAY ============ */
+        .overlay {
+            position: fixed; inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(10px);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 999; opacity: 0; visibility: hidden;
+            transition: opacity 0.35s ease, visibility 0.35s ease;
+        }
+        .overlay.active { opacity: 1; visibility: visible; }
+        .overlay-content {
+            transform: scale(0.95) translateY(10px);
+            transition: transform 0.45s cubic-bezier(0.2, 0.9, 0.4, 1), opacity 0.3s ease;
+            opacity: 0;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .overlay.active .overlay-content { transform: scale(1) translateY(0); opacity: 1; }
+        
+        /* ============ INPUTS ============ */
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent-text);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+        
+        /* ============ ANIMATIONS ============ */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .card-animate {
+            animation: fadeInUp 0.6s cubic-bezier(0.2, 0.9, 0.4, 1) forwards;
+            opacity: 0;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .spin { animation: spin 1s linear infinite; }
+        
+        /* ============ BUTTONS ============ */
+        .btn-accent {
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1);
+            position: relative;
+            overflow: hidden;
+            color: #fff;
+        }
+        .btn-accent::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        .btn-accent:hover::before { left: 100%; }
+        .btn-accent:hover {
+            background: linear-gradient(135deg, var(--accent-hover-1), var(--accent-hover-2));
+            box-shadow: 0 10px 25px -6px var(--accent-glow);
+            transform: translateY(-2px) scale(1.02);
+        }
+        .btn-accent:active { transform: translateY(0) scale(0.98); }
+        
+        .logo-glow { 
+            filter: drop-shadow(0 0 14px rgba(212, 175, 55, 0.5));
+            transition: filter 0.3s ease;
+        }
+        .logo-glow:hover {
+            filter: drop-shadow(0 0 22px rgba(212, 175, 55, 0.8));
+        }
+        
+        @keyframes goldShimmer {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+        
+        [class^="ph-"], [class*=" ph-"] {
+            display: inline-flex; align-items: center; justify-content: center; line-height: 1;
+        }
+        iconify-icon { display: inline-flex; align-items: center; justify-content: center; vertical-align: middle; }
+        
+        /* ============ BROWSER PANEL ============ */
+        .browser-panel {
+            position: fixed; inset: 0;
+            background: var(--bg-base); z-index: 500;
+            display: flex; flex-direction: column;
+            opacity: 0; visibility: hidden;
+            transform: translateY(20px);
+            transition: opacity 0.4s cubic-bezier(0.2, 0.9, 0.4, 1),
+                        visibility 0.4s ease,
+                        transform 0.4s cubic-bezier(0.2, 0.9, 0.4, 1);
+        }
+        .browser-panel.active { opacity: 1; visibility: visible; transform: translateY(0); }
+        .browser-toolbar {
+            background: var(--bg-panel);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-color);
+        }
+        .browser-frame { flex: 1; background: #fff; position: relative; overflow: hidden; }
+        .browser-frame iframe { width: 100%; height: 100%; border: none; background: #fff; }
+        .url-bar {
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            transition: all 0.25s ease;
+        }
+        .url-bar:focus-within {
+            border-color: var(--accent-border);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+        .toolbar-btn {
+            transition: all 0.2s ease; border-radius: 8px;
+            display: inline-flex; align-items: center; justify-content: center;
+        }
+        .toolbar-btn:hover:not(:disabled) {
+            background: var(--accent-glow); color: var(--accent-text);
+            transform: translateY(-1px);
+        }
+        .toolbar-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+        
+        .loading-bar {
+            position: absolute; top: 0; left: 0; height: 2px;
+            background: linear-gradient(90deg, var(--accent-hover-1), var(--accent-text));
+            width: 0%; transition: width 0.3s ease, opacity 0.3s ease;
+            z-index: 10;
+            box-shadow: 0 0 8px var(--accent-glow);
+        }
+        .loading-bar.active { animation: loadingProgress 1.5s ease-in-out infinite; }
+        @keyframes loadingProgress {
+            0% { width: 0%; left: 0; }
+            50% { width: 70%; left: 15%; }
+            100% { width: 100%; left: 0; opacity: 0; }
+        }
+        
+        .quick-launch-btn { transition: all 0.2s ease; border-radius: 8px; }
+        .quick-launch-btn:hover { background: var(--accent-glow); transform: translateY(-2px); }
+        
+        .iframe-blocked-msg {
+            position: absolute; inset: 0;
+            display: none; align-items: center; justify-content: center;
+            background: var(--bg-base); text-align: center; padding: 20px;
+        }
+        .iframe-blocked-msg.show { display: flex; }
+        
+        /* ============ ICON SIZES ============ */
+        .icon-xs { font-size: 0.75rem; }
+        .icon-sm { font-size: 0.875rem; }
+        .icon-md { font-size: 1.125rem; }
+        .icon-lg { font-size: 1.5rem; }
+        .icon-xl { font-size: 2rem; }
+        .icon-2xl { font-size: 2.5rem; }
+        .icon-3xl { font-size: 3rem; }
+        
+        .favicon-img { width: 28px; height: 28px; object-fit: contain; border-radius: 4px; transition: transform 0.3s ease; }
+        .group:hover .favicon-img { transform: scale(1.1); }
+        
+        .icon-preview-box {
+            width: 56px; height: 56px;
+            background: linear-gradient(135deg, var(--bg-input), var(--bg-card));
+            border: 1px solid var(--accent-glow);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            padding: 8px;
+            transition: all 0.3s ease;
+        }
+        .icon-preview-box img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 6px; }
+        
+        /* ============ TOAST ============ */
+        .toast {
+            position: fixed; bottom: 24px; right: 24px;
+            background: var(--bg-panel);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--accent-border);
+            color: var(--text-primary);
+            padding: 14px 20px; border-radius: 14px;
+            box-shadow: 0 15px 40px -8px rgba(0, 0, 0, 0.6);
+            display: flex; align-items: center; gap: 10px;
+            font-size: 14px; z-index: 2000;
+            transform: translateY(120px) scale(0.9); opacity: 0;
+            transition: all 0.5s cubic-bezier(0.2, 0.9, 0.4, 1);
+            max-width: 90vw;
+        }
+        .toast.show { transform: translateY(0) scale(1); opacity: 1; }
+        .toast.success { border-color: rgba(16, 185, 129, 0.5); box-shadow: 0 15px 40px -8px rgba(16, 185, 129, 0.2); }
+        .toast.error { border-color: rgba(244, 63, 94, 0.5); box-shadow: 0 15px 40px -8px rgba(244, 63, 94, 0.2); }
+        
+        /* ============ THEME PICKER ============ */
+        .theme-color-btn {
+            width: 34px; height: 34px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+        }
+        .theme-color-btn:hover { transform: scale(1.2); }
+        .theme-color-btn.active {
+            border-color: var(--text-primary);
+            box-shadow: 0 0 0 3px var(--accent-glow), 0 0 20px var(--accent-glow);
+        }
+        .theme-color-btn.active::after {
+            content: '✓';
+            position: absolute;
+            inset: 0;
+            display: flex; align-items: center; justify-content: center;
+            color: #fff; font-size: 14px; font-weight: bold;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+        }
+        
+        /* ============ STATS ============ */
+        .stat-card {
+            background: linear-gradient(135deg, var(--bg-card), var(--bg-panel));
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 18px;
+            transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: 0; right: 0;
+            width: 100px; height: 100px;
+            background: radial-gradient(circle, var(--accent-glow), transparent 70%);
+            opacity: 0.4;
+        }
+        .stat-card:hover {
+            border-color: var(--accent-border);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px -12px var(--accent-glow);
+        }
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-text), #a78bfa);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1.1;
+            font-variant-numeric: tabular-nums;
+        }
+        
+        /* ============ HISTORY ============ */
+        .history-item {
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 12px; border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.2, 0.9, 0.4, 1);
+            background: var(--bg-input);
+            border: 1px solid transparent;
+        }
+        .history-item:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--accent-border);
+            transform: translateX(6px);
+        }
+        .history-time {
+            font-size: 10px;
+            color: var(--text-muted);
+            white-space: nowrap;
+            font-weight: 500;
+        }
+        
+        /* ============ SETTINGS ============ */
+        .settings-section {
+            border-bottom: 1px solid var(--border-color);
+            padding: 22px 0;
+        }
+        .settings-section:last-child { border-bottom: none; }
+        
+        .settings-toggle {
+            position: relative;
+            width: 46px; height: 26px;
+            border-radius: 13px;
+            background: rgba(100, 116, 139, 0.4);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+        .settings-toggle::after {
+            content: '';
+            position: absolute;
+            top: 2px; left: 2px;
+            width: 20px; height: 20px;
+            border-radius: 50%;
+            background: #fff;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        }
+        .settings-toggle.active {
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            border-color: var(--accent-border);
+        }
+        .settings-toggle.active::after {
+            left: 22px;
+            box-shadow: 0 0 12px var(--accent-glow);
+        }
+        
+        /* ============ LOCK SCREEN ============ */
+        .lock-screen {
+            position: fixed; inset: 0;
+            background: #050608;
+            display: flex; align-items: center; justify-content: center;
+            z-index: 9999;
+            opacity: 0; visibility: hidden;
+            transition: opacity 0.5s cubic-bezier(0.2, 0.9, 0.4, 1), 
+                        visibility 0.5s ease;
+            overflow: hidden;
+        }
+        .lock-aurora { position: absolute; inset: 0; overflow: hidden; z-index: 0; }
+        .aurora-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.5;
+            animation: auroraFloat 18s ease-in-out infinite;
+        }
+        .aurora-blob:nth-child(1) {
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, #B8860B, transparent 70%);
+            top: -10%; left: -10%;
+        }
+        .aurora-blob:nth-child(2) {
+            width: 450px; height: 450px;
+            background: radial-gradient(circle, #D4AF37, transparent 70%);
+            bottom: -15%; right: -10%;
+            animation-delay: -6s;
+            opacity: 0.3;
+        }
+        .aurora-blob:nth-child(3) {
+            width: 350px; height: 350px;
+            background: radial-gradient(circle, #8B6508, transparent 70%);
+            top: 40%; left: 50%;
+            animation-delay: -12s;
+        }
+        @keyframes auroraFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(60px, -40px) scale(1.1); }
+            66% { transform: translate(-40px, 50px) scale(0.95); }
+        }
+        .lock-grid-bg {
+            position: absolute; inset: 0;
+            background-image: 
+                linear-gradient(rgba(212, 175, 55, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(212, 175, 55, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: 1;
+            mask-image: radial-gradient(ellipse at center, black 40%, transparent 75%);
+            -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 75%);
+        }
+        .lock-screen.active { opacity: 1; visibility: visible; }
+        .lock-content {
+            position: relative; z-index: 2; text-align: center;
+            transform: scale(0.92) translateY(20px);
+            opacity: 0;
+            transition: transform 0.6s cubic-bezier(0.2, 0.9, 0.4, 1), opacity 0.5s ease;
+        }
+        .lock-screen.active .lock-content { transform: scale(1) translateY(0); opacity: 1; }
+        .lock-clock {
+            font-size: 48px; font-weight: 200;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, #F5D77A, #D4AF37, #B8860B);
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+            line-height: 1; margin-bottom: 4px;
+            font-variant-numeric: tabular-nums;
+        }
+        .lock-date {
+            font-size: 12px; color: #B8860B;
+            letter-spacing: 1.5px; text-transform: uppercase;
+            font-weight: 500; margin-bottom: 28px;
+            opacity: 0.7;
+        }
+        .lock-logo-badge {
+            width: 76px; height: 76px; border-radius: 20px;
+            background: linear-gradient(135deg, rgba(30, 24, 10, 0.9), rgba(20, 16, 8, 0.95));
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 20px;
+            box-shadow: 
+                0 20px 40px -12px rgba(212, 175, 55, 0.4),
+                inset 0 1px 0 rgba(255, 243, 176, 0.1);
+            position: relative; overflow: hidden;
+            animation: lockPulse 3s ease-in-out infinite;
+        }
+        @keyframes lockPulse {
+            0%, 100% { box-shadow: 0 20px 40px -12px rgba(212, 175, 55, 0.4), inset 0 1px 0 rgba(255, 243, 176, 0.1); }
+            50% { box-shadow: 0 25px 50px -10px rgba(212, 175, 55, 0.6), inset 0 1px 0 rgba(255, 243, 176, 0.1); }
+        }
+        .lock-logo-svg {
+            width: 44px; height: 44px;
+            display: block; margin: 0 auto;
+            filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.5));
+            position: relative; z-index: 2;
+        }
+        .lock-icon-ring {
+            position: absolute; inset: -1px; border-radius: 20px; padding: 1px;
+            background: linear-gradient(135deg, transparent, #D4AF37, transparent);
+            -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            animation: ringRotate 4s linear infinite;
+            opacity: 0.8;
+        }
+        @keyframes ringRotate {
+            0% { background: linear-gradient(0deg, transparent, #F5D77A, transparent); }
+            100% { background: linear-gradient(360deg, transparent, #F5D77A, transparent); }
+        }
+        .lock-subtitle { 
+            font-size: 13px; 
+            color: #94a3b8; 
+            margin-bottom: 28px; 
+            letter-spacing: 0.3px;
+        }
+        .pin-dots-container { display: flex; justify-content: center; gap: 16px; margin-bottom: 12px; padding: 8px; }
+        .pin-dot {
+            width: 16px; height: 16px; border-radius: 50%;
+            background: rgba(51, 65, 85, 0.4);
+            border: 1.5px solid rgba(148, 163, 184, 0.2);
+            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+        }
+        .pin-dot.filled {
+            background: linear-gradient(135deg, #F5D77A, #D4AF37);
+            border-color: transparent;
+            box-shadow: 0 0 16px rgba(212, 175, 55, 0.6), 0 0 0 4px rgba(212, 175, 55, 0.1);
+            transform: scale(1.25);
+        }
+        .pin-message-container {
+            height: 24px; display: flex; align-items: center; justify-content: center;
+            margin-bottom: 24px;
+        }
+        .pin-message {
+            font-size: 13px; font-weight: 500;
+            display: flex; align-items: center; gap: 6px;
+            opacity: 0; transform: translateY(-4px);
+            transition: all 0.3s ease;
+        }
+        .pin-message.show { opacity: 1; transform: translateY(0); }
+        .pin-message.error { color: #fb7185; }
+        .pin-message.success { color: #D4AF37; }
+        .pin-message.info { color: #94a3b8; }
+        .pin-keypad {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+            max-width: 280px; margin: 0 auto 24px;
+        }
+        .pin-keypad-btn {
+            width: 68px; height: 68px; border-radius: 50%;
+            background: linear-gradient(135deg, rgba(30, 24, 10, 0.7), rgba(20, 16, 8, 0.7));
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            color: #F5D77A; font-size: 24px; font-weight: 400;
+            transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex; align-items: center; justify-content: center;
+            position: relative; overflow: hidden; cursor: pointer;
+            font-variant-numeric: tabular-nums; user-select: none;
+        }
+        .pin-keypad-btn:hover {
+            background: linear-gradient(135deg, rgba(60, 45, 15, 0.9), rgba(40, 30, 10, 0.9));
+            border-color: rgba(212, 175, 55, 0.5);
+            box-shadow: 0 8px 24px -8px rgba(212, 175, 55, 0.5), inset 0 1px 0 rgba(255, 243, 176, 0.15);
+            transform: translateY(-3px) scale(1.03);
+        }
+        .pin-keypad-btn:active {
+            transform: translateY(-1px) scale(0.96);
+            box-shadow: 0 4px 12px -4px rgba(212, 175, 55, 0.5), inset 0 2px 4px rgba(0,0,0,0.3);
+        }
+        .pin-keypad-btn.empty { visibility: hidden; pointer-events: none; }
+        .pin-keypad-btn.backspace { color: #fb7185; }
+        .ripple {
+            position: absolute; border-radius: 50%;
+            background: rgba(212, 175, 55, 0.4);
+            transform: scale(0); animation: rippleAnim 0.6s ease-out;
+            pointer-events: none;
+        }
+        @keyframes rippleAnim { to { transform: scale(4); opacity: 0; } }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+            20%, 40%, 60%, 80% { transform: translateX(10px); }
+        }
+        .shake { animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97); }
+        .lock-success {
+            position: absolute; inset: 0; display: none;
+            align-items: center; justify-content: center;
+            background: rgba(5, 6, 8, 0.98); z-index: 100;
+        }
+        .lock-success.show { display: flex; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .success-circle {
+            width: 100px; height: 100px; border-radius: 50%;
+            border: 3px solid #D4AF37;
+            display: flex; align-items: center; justify-content: center;
+            animation: successPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.5);
+        }
+        @keyframes successPop {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .success-circle svg {
+            stroke: #D4AF37; stroke-width: 3;
+            stroke-dasharray: 100; stroke-dashoffset: 100;
+            animation: drawCheck 0.6s 0.3s ease forwards;
+        }
+        @keyframes drawCheck { to { stroke-dashoffset: 0; } }
+        .lock-footer {
+            display: flex; align-items: center; justify-content: center;
+            gap: 6px; font-size: 11px; color: #475569; margin-top: 24px;
+            letter-spacing: 0.3px;
+        }
+        
+        /* ============ SNAKE GAME ============ */
+        .game-snake-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 32px 16px;
+            text-align: center;
+        }
+        .game-snake-container.show { display: flex; }
+        .game-canvas-wrap {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 2px solid var(--accent-border);
+            box-shadow: 0 20px 50px -12px var(--accent-glow);
+        }
+        #snakeCanvas {
+            display: block;
+            background: var(--bg-base);
+            image-rendering: pixelated;
+        }
+        .game-score {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+        
+        /* ============ NOTES ============ */
+        .notes-indicator {
+            position: absolute;
+            top: 10px; right: 10px;
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: #D4AF37;
+            box-shadow: 0 0 8px rgba(212, 175, 55, 0.6);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 3;
+        }
+        .glass-card.has-notes .notes-indicator { opacity: 1; }
+        
+        .notes-popup {
+            position: absolute;
+            top: 10px; right: 10px;
+            width: 240px;
+            background: var(--bg-panel);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--accent-border);
+            border-radius: 14px;
+            padding: 12px;
+            opacity: 0; visibility: hidden;
+            transform: translateY(-10px) scale(0.95);
+            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1);
+            z-index: 20;
+            box-shadow: 0 20px 40px -8px rgba(0,0,0,0.5);
+        }
+        .glass-card:hover .notes-popup.has-content {
+            opacity: 1; visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+        
+        .konami-active { animation: konamiRainbow 2s ease-in-out; }
+        @keyframes konamiRainbow {
+            0%, 100% { filter: hue-rotate(0deg); }
+            50% { filter: hue-rotate(360deg); }
+        }
+        
+        .install-btn {
+            background: linear-gradient(135deg, var(--accent-hover-1), var(--accent-1));
+            animation: pulseGlow 2s ease-in-out infinite;
+            color: #0a0c14;
+            font-weight: 600;
+        }
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4); }
+            50% { box-shadow: 0 0 0 12px rgba(212, 175, 55, 0); }
+        }
+        
+        /* ============ MODERN SPLIT FOOTER ============ */
+        .modern-footer {
+            position: relative;
+            width: 100%;
+            border-radius: 28px;
+            overflow: hidden;
+            background: linear-gradient(135deg, 
+                rgba(22, 26, 32, 0.85), 
+                rgba(15, 17, 22, 0.95));
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            box-shadow: 
+                0 30px 70px -20px rgba(0, 0, 0, 0.7),
+                inset 0 1px 0 rgba(255, 243, 176, 0.08);
+            isolation: isolate;
+        }
+        
+        html[data-theme="light"] .modern-footer {
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.95), 
+                rgba(248, 250, 252, 0.98));
+        }
+        
+        .footer-bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(212, 175, 55, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(212, 175, 55, 0.04) 1px, transparent 1px);
+            background-size: 40px 40px;
+            mask-image: radial-gradient(ellipse at 50% 0%, black 20%, transparent 70%);
+            -webkit-mask-image: radial-gradient(ellipse at 50% 0%, black 20%, transparent 70%);
+            z-index: 0;
+        }
+        
+        .footer-bg-glow {
+            position: absolute;
+            top: -50%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 100%;
+            background: radial-gradient(ellipse, var(--accent-glow), transparent 60%);
+            opacity: 0.4;
+            pointer-events: none;
+            animation: footerGlowPulse 8s ease-in-out infinite;
+            z-index: 0;
+        }
+        
+        @keyframes footerGlowPulse {
+            0%, 100% { opacity: 0.3; transform: translateX(-50%) scale(1); }
+            50% { opacity: 0.5; transform: translateX(-50%) scale(1.1); }
+        }
+        
+        .footer-inner {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+            padding: 40px 36px;
+        }
+        
+        @media (min-width: 768px) {
+            .footer-inner {
+                grid-template-columns: 1.1fr 1fr;
+                gap: 60px;
+                padding: 48px 44px;
+            }
+        }
+        
+        .footer-left {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+        
+        .footer-brand-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .footer-logo-wrap {
+            position: relative;
+            width: 58px;
+            height: 58px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 16px;
+            background: linear-gradient(135deg, 
+                rgba(212, 175, 55, 0.15), 
+                rgba(212, 175, 55, 0.05));
+            border: 1px solid var(--accent-border);
+            box-shadow: 0 8px 24px -8px var(--accent-glow);
+        }
+        
+        .footer-logo-wrap::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 18px;
+            background: conic-gradient(from 0deg, 
+                transparent, var(--accent-text), transparent 30%,
+                transparent 70%, var(--accent-text), transparent);
+            animation: rotateGlow 6s linear infinite;
+            opacity: 0.5;
+            z-index: -1;
+        }
+        
+        .footer-logo-new {
+            width: 38px;
+            height: 38px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 10px var(--accent-glow));
+        }
+        
+        .footer-brand-new {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #F5D77A, #D4AF37, #B8860B, #D4AF37);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: goldShimmer 3s linear infinite;
+            line-height: 1;
+        }
+        
+        .footer-version {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+            margin-top: 6px;
+        }
+        
+        .version-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #10b981;
+            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            animation: statusPulse 2s infinite;
+        }
+        
+        @keyframes statusPulse {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+        
+        .footer-desc {
+            font-size: 13.5px;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            max-width: 460px;
+        }
+        
+        .footer-quote-new {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            background: var(--bg-input);
+            border-left: 3px solid var(--accent-text);
+            font-size: 12.5px;
+            font-style: italic;
+            color: var(--text-secondary);
+            max-width: 460px;
+        }
+        
+        .footer-quote-new i {
+            color: var(--accent-text);
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        
+        .footer-right {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .footer-section-title {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--accent-text);
+            margin-bottom: 4px;
+        }
+        
+        .footer-badges-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        
+        .footer-badge-new {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            border-radius: 14px;
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: default;
+        }
+        
+        .footer-badge-new:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--accent-border);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 28px -8px var(--accent-glow);
+        }
+        
+        .footer-badge-new i {
+            font-size: 22px;
+            color: var(--accent-text);
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+        }
+        
+        .footer-badge-new:hover i {
+            transform: scale(1.15) rotate(-5deg);
+        }
+        
+        .badge-title {
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.2;
+        }
+        
+        .badge-desc {
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-top: 2px;
+            letter-spacing: 0.3px;
+        }
+        
+        .footer-bottom {
+            position: relative;
+            z-index: 1;
+            border-top: 1px solid var(--border-color);
+            background: rgba(0, 0, 0, 0.15);
+        }
+        
+        html[data-theme="light"] .footer-bottom {
+            background: rgba(0, 0, 0, 0.02);
+        }
+        
+        .footer-bottom-inner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            padding: 20px 36px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        
+        @media (min-width: 640px) {
+            .footer-bottom-inner {
+                flex-direction: row;
+                justify-content: space-between;
+                padding: 18px 44px;
+            }
+        }
+        
+        .footer-credit {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .footer-credit strong {
+            color: var(--accent-text);
+            font-weight: 600;
+        }
+        
+        .footer-credit-muted {
+            opacity: 0.6;
+            font-size: 11px;
+        }
+        
+        .footer-legal {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            opacity: 0.8;
+        }
+        
+        .legal-dot {
+            opacity: 0.4;
+        }
+        
+        .footer-heart {
+            display: inline-block;
+            color: #fb7185;
+            animation: heartBeat 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+        
+        @media (max-width: 640px) {
+            .footer-inner { padding: 32px 22px; gap: 32px; }
+            .footer-brand-new { font-size: 20px; }
+            .footer-logo-wrap { width: 50px; height: 50px; }
+            .footer-logo-new { width: 32px; height: 32px; }
+            .footer-badges-grid { grid-template-columns: 1fr; }
+            .footer-bottom-inner { padding: 16px 22px; }
+        }
+        
+        /* ============ LIGHT MODE OVERRIDE HEADER ============ */
+        html[data-theme="light"] .modern-header {
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.9), 
+                rgba(248, 250, 252, 0.95));
+        }
+        html[data-theme="light"] .add-btn-modern { color: #fff; }
+        
+        /* ============ RESPONSIVE HEADER ============ */
+        @media (max-width: 640px) {
+            .modern-header { padding: 10px 14px; border-radius: 16px; }
+            .brand-logo-wrap { width: 38px; height: 38px; }
+            .brand-logo { width: 30px; height: 30px; }
+            .brand-name { font-size: 15px; }
+            .brand-tag { display: none; }
+            .icon-btn { width: 36px; height: 36px; border-radius: 10px; }
+            .browser-btn { width: 36px; padding: 0; }
+            .browser-btn span { display: none; }
+            .add-btn-modern { width: 36px; padding: 0; height: 36px; font-size: 12px; }
+            .add-btn-modern span { display: none; }
+            .action-btn-new { padding: 12px; }
+            .action-btn-new span { display: none; }
+            .search-bar-inner { padding: 10px 12px; }
+        }
+    </style>
+</head>
+<body class="bg-soft-dark min-h-screen flex flex-col items-center justify-start p-4 md:p-8">
+
+    <!-- Particle background -->
+    <div class="particles-bg" id="particlesBg"></div>
+
+    <!-- ============ PASSWORD LOCK SCREEN ============ -->
+    <div id="lockScreen" class="lock-screen">
+        <div class="lock-aurora">
+            <div class="aurora-blob"></div>
+            <div class="aurora-blob"></div>
+            <div class="aurora-blob"></div>
+        </div>
+        <div class="lock-grid-bg"></div>
+        <div id="lockSuccess" class="lock-success">
+            <div class="success-circle">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+                    <path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+        </div>
+        <div class="lock-content px-6">
+            <div class="lock-clock" id="lockClock">00:00</div>
+            <div class="lock-date" id="lockDate">Memuat...</div>
+            <div class="lock-logo-badge">
+                <div class="lock-icon-ring"></div>
+                <svg class="lock-logo-svg" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="lockGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#F5D77A"/>
+                            <stop offset="50%" stop-color="#D4AF37"/>
+                            <stop offset="100%" stop-color="#8B6508"/>
+                        </linearGradient>
+                        <linearGradient id="lockGoldLight" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#FFF3B0"/>
+                            <stop offset="100%" stop-color="#D4AF37"/>
+                        </linearGradient>
+                    </defs>
+                    <path d="M 190 130 L 322 130 L 310 165 L 202 165 Z" fill="url(#lockGoldGrad)"/>
+                    <path d="M 190 130 L 175 75 L 210 105 L 240 55 L 256 100 L 272 55 L 302 105 L 337 75 L 322 130 Z" fill="url(#lockGoldLight)"/>
+                    <path d="M 175 165 L 340 165 L 320 200 L 200 200 Z" fill="url(#lockGoldLight)"/>
+                    <path d="M 220 200 L 285 200 L 285 380 L 220 380 Z" fill="url(#lockGoldGrad)"/>
+                    <path d="M 145 340 L 145 400 Q 145 460 210 460 L 245 460 Q 290 460 305 425 L 285 400 Q 275 420 250 420 L 220 420 Q 200 420 200 400 L 200 340 Z" fill="url(#lockGoldGrad)"/>
+                    <path d="M 300 165 L 355 165 L 345 195 L 300 195 Z" fill="url(#lockGoldLight)"/>
+                    <path d="M 320 195 L 355 195 L 355 400 L 320 400 Z" fill="url(#lockGoldGrad)"/>
+                    <path d="M 320 380 L 355 380 L 355 430 L 320 430 Z" fill="url(#lockGoldGrad)"/>
+                    <path d="M 210 420 Q 350 415 385 340 Q 400 300 370 265" stroke="url(#lockGoldLight)" stroke-width="10" fill="none" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <p class="lock-subtitle">🔒 Masukkan PIN untuk melanjutkan</p>
+            <div id="pinDots" class="pin-dots-container"></div>
+            <div class="pin-message-container">
+                <div id="pinMessage" class="pin-message"></div>
+            </div>
+            <div id="pinKeypad" class="pin-keypad"></div>
+            <div class="lock-footer">
+                <i class="ph ph-shield-check"></i>
+                <span>Dilindungi oleh Joh4nity Security</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ CONTENT ============ -->
+    <div class="content-wrap w-full max-w-6xl flex flex-col items-center">
+
+        <!-- ============ MODERN HEADER ============ -->
+        <header class="modern-header">
+            <div class="header-inner">
+                <div class="brand-wrap" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+                    <div class="brand-logo-wrap">
+                        <img src="icon-rb.png" alt="Joh4nity" class="brand-logo">
+                    </div>
+                    <div class="brand-text">
+                        <span class="brand-name">Joh4nity</span>
+                        <span class="brand-tag">Premium Portal</span>
+                    </div>
+                </div>
+
+                <div class="header-actions">
+                    <button id="themeToggleBtn" class="icon-btn" data-tip="Ganti Tema">
+                        <i class="ph ph-sun icon-md" id="themeIcon"></i>
+                    </button>
+                    <button id="openBrowserBtn" class="icon-btn browser-btn" data-tip="Buka Browser">
+                        <i class="ph ph-globe-simple icon-md"></i>
+                        <span>Browser</span>
+                    </button>
+                    <button id="settingsBtn" class="icon-btn" data-tip="Pengaturan">
+                        <i class="ph ph-gear-six icon-md"></i>
+                    </button>
+                    <button id="addBtn" class="add-btn-modern">
+                        <i class="ph ph-plus-circle icon-md"></i>
+                        <span>Tambah</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- PWA Install Banner -->
+        <div id="installBanner" class="hidden w-full mb-6 glass-card rounded-2xl p-4" style="border-color: var(--accent-border);">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background: var(--accent-glow);">
+                    <i class="ph ph-device-mobile icon-xl" style="color: var(--accent-text);"></i>
+                </div>
+                <div class="flex-1">
+                    <p class="text-sm font-semibold" style="color: var(--text-primary);">Install Joh4nity</p>
+                    <p class="text-xs" style="color: var(--text-secondary);">Jadikan aplikasi di perangkat Anda!</p>
+                </div>
+                <button id="installBtn" class="install-btn px-4 py-2 rounded-xl text-sm flex items-center gap-2">
+                    <i class="ph ph-download-simple icon-md"></i> Install
+                </button>
+                <button id="dismissInstallBtn" class="p-2 transition-colors" style="color: var(--text-muted);">
+                    <i class="ph ph-x icon-md"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="w-full mb-6 grid grid-cols-2 md:grid-cols-4 gap-3">
+            <div class="stat-card">
+                <div class="flex items-center gap-2 mb-2">
+                    <i class="ph ph-link icon-md" style="color: var(--accent-text);"></i>
+                    <span class="text-xs font-medium" style="color: var(--text-secondary);">Total Link</span>
+                </div>
+                <div class="stat-value" id="statTotalLinks">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="flex items-center gap-2 mb-2">
+                    <i class="ph ph-cursor-click icon-md" style="color: var(--accent-text);"></i>
+                    <span class="text-xs font-medium" style="color: var(--text-secondary);">Dibuka Hari Ini</span>
+                </div>
+                <div class="stat-value" id="statTodayOpens">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="flex items-center gap-2 mb-2">
+                    <i class="ph ph-fire icon-md" style="color: var(--accent-text);"></i>
+                    <span class="text-xs font-medium" style="color: var(--text-secondary);">Terpopuler</span>
+                </div>
+                <div class="stat-value text-base truncate" id="statTopLink">-</div>
+            </div>
+            <div class="stat-card">
+                <div class="flex items-center gap-2 mb-2">
+                    <i class="ph ph-clock-counter-clockwise icon-md" style="color: var(--accent-text);"></i>
+                    <span class="text-xs font-medium" style="color: var(--text-secondary);">Total Kunjungan</span>
+                </div>
+                <div class="stat-value" id="statTotalOpens">0</div>
+            </div>
+        </div>
+
+        <!-- ============ MODERN SEARCH BAR ============ -->
+        <div class="w-full mb-6 flex gap-3">
+            <div class="search-bar-wrap">
+                <div class="search-bar-inner">
+                    <div class="search-icon-wrap">
+                        <i class="ph ph-magnifying-glass icon-md"></i>
+                    </div>
+                    <input type="text" id="searchInput" placeholder="Cari link..." class="search-input-new" autocomplete="off" spellcheck="false">
+                    <span class="search-shortcut">
+                        <kbd>Ctrl</kbd>
+                        <span>+</span>
+                        <kbd>K</kbd>
+                    </span>
+                </div>
+            </div>
+            <button id="toggleHistoryBtn" class="action-btn-new">
+                <i class="ph ph-clock-counter-clockwise icon-md"></i>
+                <span class="hidden sm:inline">Riwayat</span>
+            </button>
+            <button id="playGameBtn" class="action-btn-new">
+                <i class="ph ph-game-controller icon-md"></i>
+                <span class="hidden sm:inline">Game</span>
+            </button>
+        </div>
+
+        <!-- History Panel -->
+        <div id="historyPanel" class="w-full mb-6 glass-card rounded-2xl p-4 hidden">
+            <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-2">
+                    <i class="ph ph-clock-counter-clockwise icon-md" style="color: var(--accent-text);"></i>
+                    <h3 class="text-sm font-semibold" style="color: var(--text-primary);">Riwayat Terakhir</h3>
+                    <span class="text-xs" style="color: var(--text-muted);">(10 terakhir)</span>
+                </div>
+                <button id="clearHistoryBtn" class="text-xs transition-colors flex items-center gap-1" style="color: var(--text-secondary);">
+                    <i class="ph ph-trash icon-sm"></i> Bersihkan
+                </button>
+            </div>
+            <div id="historyList" class="grid grid-cols-1 md:grid-cols-2 gap-2"></div>
+        </div>
+
+        <!-- Snake Game -->
+        <div id="snakeContainer" class="w-full mb-6 glass-card rounded-2xl game-snake-container">
+            <div class="flex items-center gap-3 mb-4">
+                <i class="ph ph-game-controller icon-xl" style="color: var(--accent-text);"></i>
+                <h3 class="text-lg font-semibold" style="color: var(--text-primary);">🐍 Snake Game</h3>
+                <span class="game-score ml-auto">Skor: <span id="snakeScore" class="font-bold" style="color: var(--accent-text);">0</span></span>
+                <span class="game-score">Best: <span id="snakeBest" class="font-bold" style="color: var(--accent-text);">0</span></span>
+                <button id="closeGameBtn" class="p-2 rounded-lg transition-colors" style="color: var(--text-muted);">
+                    <i class="ph ph-x icon-md"></i>
+                </button>
+            </div>
+            <div class="game-canvas-wrap">
+                <canvas id="snakeCanvas" width="400" height="400"></canvas>
+            </div>
+            <div class="mt-4 flex flex-col items-center gap-2">
+                <div class="text-xs" style="color: var(--text-muted);">
+                    Gunakan <kbd class="px-1.5 py-0.5 rounded font-mono" style="background: var(--bg-input);">↑↓←→</kbd> atau <kbd class="px-1.5 py-0.5 rounded font-mono" style="background: var(--bg-input);">WASD</kbd> untuk gerak
+                </div>
+                <button id="startSnakeBtn" class="btn-accent px-6 py-2.5 rounded-xl text-sm font-medium flex items-center gap-2 mt-2">
+                    <i class="ph ph-play icon-md"></i> Mulai
+                </button>
+            </div>
+        </div>
+
+        <!-- Deskripsi -->
+        <div class="w-full mb-6 text-sm flex items-center gap-2" style="color: var(--text-secondary);">
+            <i class="ph ph-magic-wand icon-md" style="color: var(--accent-text);"></i>
+            <span>Klik card untuk membuka · Hover untuk catatan · Ketik ↑↑↓↓←→←→BA untuk easter egg</span>
+        </div>
+
+        <!-- Grid Card -->
+        <main class="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6" id="cardGrid"></main>
+
+        <!-- ============ MODERN SPLIT FOOTER ============ -->
+        <footer class="modern-footer w-full mt-16">
+            <div class="footer-bg-grid"></div>
+            <div class="footer-bg-glow"></div>
+            
+            <div class="footer-inner">
+                <!-- LEFT: Brand & Identity -->
+                <div class="footer-left">
+                    <div class="footer-brand-row">
+                        <div class="footer-logo-wrap">
+                            <img src="icon-rb.png" alt="Joh4nity" class="footer-logo-new">
+                        </div>
+                        <div>
+                            <h2 class="footer-brand-new">Joh4nity</h2>
+                            <p class="footer-version">
+                                <span class="version-dot"></span>
+                                v5.0 — Gold Edition
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <p class="footer-desc">
+                        Portal pribadi dengan koleksi link cerdas — dirancang untuk 
+                        produktivitas maksimal. Cepat, aman, dan selalu dalam kendali Anda.
+                    </p>
+                    
+                    <div class="footer-quote-new">
+                        <i class="ph ph-quotes"></i>
+                        <span>Satu portal untuk semua kebutuhan digitalmu.</span>
+                    </div>
+                </div>
+                
+                <!-- RIGHT: Badges Grid -->
+                <div class="footer-right">
+                    <h3 class="footer-section-title">Fitur Unggulan</h3>
+                    <div class="footer-badges-grid">
+                        <div class="footer-badge-new">
+                            <i class="ph ph-shield-check"></i>
+                            <div>
+                                <p class="badge-title">Privacy First</p>
+                                <p class="badge-desc">Data lokal</p>
+                            </div>
+                        </div>
+                        <div class="footer-badge-new">
+                            <i class="ph ph-lightning"></i>
+                            <div>
+                                <p class="badge-title">Super Fast</p>
+                                <p class="badge-desc">Zero delay</p>
+                            </div>
+                        </div>
+                        <div class="footer-badge-new">
+                            <i class="ph ph-device-mobile"></i>
+                            <div>
+                                <p class="badge-title">PWA Ready</p>
+                                <p class="badge-desc">Installable</p>
+                            </div>
+                        </div>
+                        <div class="footer-badge-new">
+                            <i class="ph ph-cloud-slash"></i>
+                            <div>
+                                <p class="badge-title">Offline</p>
+                                <p class="badge-desc">Capable</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- BOTTOM: Copyright bar -->
+            <div class="footer-bottom">
+                <div class="footer-bottom-inner">
+                    <p class="footer-credit">
+                        Made with <span class="footer-heart">❤</span> by 
+                        <strong>yallism</strong>
+                        <span class="footer-credit-muted">(Founder HADES)</span>
+                    </p>
+                    <div class="footer-legal">
+                        <span>© 2024 Joh4nity</span>
+                        <span class="legal-dot">•</span>
+                        <span>All rights reserved</span>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- ============ SETTINGS ============ -->
+    <div id="settingsOverlay" class="overlay">
+        <div class="overlay-content glass-card w-full max-w-lg mx-4 p-6 rounded-2xl">
+            <div class="flex justify-between items-center mb-5">
+                <h2 class="text-xl font-semibold flex items-center gap-2" style="color: var(--text-primary);">
+                    <i class="ph ph-gear-six icon-md" style="color: var(--accent-text);"></i> Pengaturan
+                </h2>
+                <button id="closeSettingsBtn" class="transition-colors" style="color: var(--text-secondary);">
+                    <i class="ph ph-x icon-lg"></i>
+                </button>
+            </div>
+            
+            <div class="settings-section">
+                <div class="flex items-center gap-2 mb-3">
+                    <i class="ph ph-palette icon-md" style="color: var(--accent-text);"></i>
+                    <h3 class="text-sm font-semibold" style="color: var(--text-primary);">Tema Warna Aksen</h3>
+                </div>
+                <div class="flex flex-wrap gap-3" id="themeColorPicker"></div>
+            </div>
+            
+            <div class="settings-section">
+                <div class="flex items-center gap-2 mb-3">
+                    <i class="ph ph-moon-stars icon-md" style="color: var(--accent-text);"></i>
+                    <h3 class="text-sm font-semibold" style="color: var(--text-primary);">Tampilan</h3>
+                </div>
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between rounded-xl p-3" style="background: var(--bg-input);">
+                        <div class="flex items-center gap-3">
+                            <i class="ph ph-circle-half-tilt icon-lg" style="color: var(--text-secondary);"></i>
+                            <div>
+                                <p class="text-sm" style="color: var(--text-primary);">Ikuti Sistem</p>
+                                <p class="text-xs" style="color: var(--text-muted);">Auto dark/light mode</p>
+                            </div>
+                        </div>
+                        <div id="autoThemeToggle" class="settings-toggle"></div>
+                    </div>
+                    <div class="flex items-center justify-between rounded-xl p-3" style="background: var(--bg-input);">
+                        <div class="flex items-center gap-3">
+                            <i class="ph ph-sparkle icon-lg" style="color: var(--text-secondary);"></i>
+                            <div>
+                                <p class="text-sm" style="color: var(--text-primary);">Animasi Partikel</p>
+                                <p class="text-xs" style="color: var(--text-muted);">Background bergerak</p>
+                            </div>
+                        </div>
+                        <div id="particlesToggle" class="settings-toggle active"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="settings-section">
+                <div class="flex items-center gap-2 mb-3">
+                    <i class="ph ph-shield-check icon-md" style="color: var(--accent-text);"></i>
+                    <h3 class="text-sm font-semibold" style="color: var(--text-primary);">Keamanan</h3>
+                </div>
+                <div class="flex items-center justify-between rounded-xl p-3" style="background: var(--bg-input);">
+                    <div class="flex items-center gap-3">
+                        <i class="ph ph-lock-key icon-lg" style="color: var(--text-secondary);"></i>
+                        <div>
+                            <p class="text-sm" style="color: var(--text-primary);">Kunci Aplikasi</p>
+                            <p class="text-xs" id="lockStatus" style="color: var(--text-muted);">Belum aktif</p>
+                        </div>
+                    </div>
+                    <button id="toggleLockBtn" class="btn-accent px-3 py-1.5 rounded-lg text-xs font-medium">Aktifkan</button>
+                </div>
+                <button id="changePinBtn" class="hidden w-full mt-2 rounded-xl p-2 text-xs transition-colors" style="background: var(--bg-input); color: var(--text-primary);">
+                    <i class="ph ph-pencil-simple icon-sm"></i> Ganti PIN
+                </button>
+            </div>
+            
+            <div class="settings-section">
+                <div class="flex items-center gap-2 mb-3">
+                    <i class="ph ph-database icon-md" style="color: var(--accent-text);"></i>
+                    <h3 class="text-sm font-semibold" style="color: var(--text-primary);">Data & Backup</h3>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <button id="exportBtn" class="rounded-xl p-3 text-sm transition-colors flex items-center justify-center gap-2" style="background: var(--bg-input); color: var(--text-primary);">
+                        <i class="ph ph-download-simple icon-md"></i> Export
+                    </button>
+                    <button id="importBtn" class="rounded-xl p-3 text-sm transition-colors flex items-center justify-center gap-2" style="background: var(--bg-input); color: var(--text-primary);">
+                        <i class="ph ph-upload-simple icon-md"></i> Import
+                    </button>
+                </div>
+                <input type="file" id="importFile" accept=".json" class="hidden">
+                <button id="resetAllBtn" class="w-full mt-2 bg-rose-600/20 hover:bg-rose-600/30 border border-rose-500/30 rounded-xl p-3 text-sm text-rose-400 transition-colors flex items-center justify-center gap-2">
+                    <i class="ph ph-trash icon-md"></i> Reset Semua Data
+                </button>
+            </div>
+            
+            <div class="settings-section">
+                <div class="flex items-center gap-2 mb-3">
+                    <i class="ph ph-chart-line-up icon-md" style="color: var(--accent-text);"></i>
+                    <h3 class="text-sm font-semibold" style="color: var(--text-primary);">Statistik</h3>
+                </div>
+                <div class="space-y-2 text-sm" id="statsDetail"></div>
+            </div>
+            
+            <div class="settings-section">
+                <div class="flex items-center gap-2 mb-3">
+                    <i class="ph ph-info icon-md" style="color: var(--accent-text);"></i>
+                    <h3 class="text-sm font-semibold" style="color: var(--text-primary);">Tentang</h3>
+                </div>
+                <div class="text-xs space-y-1" style="color: var(--text-secondary);">
+                    <p><strong style="color: var(--text-primary);">Joh4nity v5.0</strong> — Portal & Browser</p>
+                    <p>Dibuat oleh <strong style="color: var(--accent-text);">yallism</strong> (Founder HADES) 2024</p>
+                    <p>PWA Ready · Offline Capable · Privacy First</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PIN Setup -->
+    <div id="pinSetupOverlay" class="overlay">
+        <div class="overlay-content glass-card w-full max-w-sm mx-4 p-6 rounded-2xl">
+            <div class="text-center">
+                <i class="ph ph-lock-key text-4xl mb-4 icon-2xl" style="color: var(--accent-text);"></i>
+                <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);" id="pinSetupTitle">Atur PIN Baru</h3>
+                <p class="text-sm mb-6" style="color: var(--text-secondary);" id="pinSetupDesc">Masukkan 4-6 digit PIN</p>
+                <div id="pinSetupDots" class="pin-dots-container"></div>
+                <div class="pin-message-container">
+                    <div id="pinSetupMessage" class="pin-message"></div>
+                </div>
+                <div id="pinSetupKeypad" class="pin-keypad"></div>
+                <button id="pinSetupOkBtn" class="btn-accent w-full py-3 rounded-xl font-medium text-sm mb-3">
+                    <i class="ph ph-check icon-md"></i> Lanjut
+                </button>
+                <button id="cancelPinSetup" class="text-sm transition-colors" style="color: var(--text-secondary);">Batal</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Browser Panel -->
+    <div id="browserPanel" class="browser-panel">
+        <div class="browser-toolbar px-3 md:px-4 py-2.5 flex items-center gap-2 md:gap-3">
+            <div class="flex items-center gap-1">
+                <button id="backBtn" class="toolbar-btn p-2" style="color: var(--text-secondary);" disabled><i class="ph ph-arrow-left icon-md"></i></button>
+                <button id="forwardBtn" class="toolbar-btn p-2" style="color: var(--text-secondary);" disabled><i class="ph ph-arrow-right icon-md"></i></button>
+                <button id="reloadBtn" class="toolbar-btn p-2" style="color: var(--text-secondary);"><i class="ph ph-arrows-clockwise icon-md"></i></button>
+                <button id="homeBtn" class="toolbar-btn p-2" style="color: var(--text-secondary);"><i class="ph ph-house icon-md"></i></button>
+            </div>
+            <div class="url-bar flex-1 flex items-center gap-2 rounded-xl px-3 py-2">
+                <i class="ph ph-lock-simple icon-sm" style="color: var(--accent-text);"></i>
+                <input type="text" id="urlBar" placeholder="Ketik URL atau pencarian..." class="flex-1 bg-transparent text-sm outline-none border-none" style="color: var(--text-primary);" autocomplete="off" spellcheck="false">
+                <button id="goBtn" class="transition-colors" style="color: var(--accent-text);"><i class="ph ph-arrow-right icon-md"></i></button>
+            </div>
+            <div class="flex items-center gap-1">
+                <button id="openExternalBtn" class="toolbar-btn p-2" style="color: var(--text-secondary);"><i class="ph ph-arrow-square-out icon-md"></i></button>
+                <button id="copyUrlBtn" class="toolbar-btn p-2" style="color: var(--text-secondary);"><i class="ph ph-copy icon-md"></i></button>
+                <button id="fullscreenBtn" class="toolbar-btn p-2" style="color: var(--text-secondary);"><i class="ph ph-corners-out icon-md"></i></button>
+                <button id="closeBrowserBtn" class="toolbar-btn p-2 hover:text-rose-400" style="color: var(--text-secondary);"><i class="ph ph-x icon-md"></i></button>
+            </div>
+        </div>
+        <div class="browser-toolbar px-3 md:px-4 py-2 flex items-center gap-2 overflow-x-auto">
+            <span class="text-xs whitespace-nowrap flex items-center gap-1" style="color: var(--text-muted);">
+                <i class="ph ph-lightning icon-sm" style="color: var(--accent-text);"></i> Cepat:
+            </span>
+            <div id="quickLaunch" class="flex items-center gap-1.5"></div>
+        </div>
+        <div class="browser-frame">
+            <div id="loadingBar" class="loading-bar"></div>
+            <iframe id="siteFrame" src="about:blank" sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-modals allow-downloads" referrerpolicy="no-referrer" allow="clipboard-read; clipboard-write; fullscreen"></iframe>
+            <div id="blockedMsg" class="iframe-blocked-msg">
+                <div class="max-w-md">
+                    <i class="ph ph-shield-warning mb-4 icon-3xl" style="color: var(--accent-text);"></i>
+                    <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">Website Menolak Ditampilkan</h3>
+                    <p class="text-sm mb-3" style="color: var(--text-secondary);">Website mengirim header keamanan X-Frame-Options.</p>
+                    <div class="flex gap-2 justify-center">
+                        <button id="openExternalFromBlocked" class="btn-accent px-4 py-2 rounded-xl text-sm font-medium flex items-center gap-2">
+                            <i class="ph ph-arrow-square-out icon-md"></i> Buka di Tab Baru
+                        </button>
+                        <button id="closeFromBlocked" class="px-4 py-2 rounded-xl text-sm font-medium transition-colors" style="background: var(--bg-input); color: var(--text-primary);">Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="browser-toolbar px-4 py-1.5 flex items-center justify-between text-xs" style="color: var(--text-muted);">
+            <span id="statusText" class="flex items-center gap-1.5">
+                <i class="ph ph-circle-fill icon-xs" style="color: var(--accent-text);"></i> Siap
+            </span>
+            <div class="flex items-center gap-3">
+                <span id="zoomIndicator">100%</span>
+                <button id="zoomOutBtn" class="toolbar-btn p-1"><i class="ph ph-minus icon-sm"></i></button>
+                <button id="zoomInBtn" class="toolbar-btn p-1"><i class="ph ph-plus icon-sm"></i></button>
+                <button id="zoomResetBtn" class="toolbar-btn p-1"><i class="ph ph-magnifying-glass icon-sm"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form Overlay -->
+    <div id="overlay" class="overlay">
+        <div class="overlay-content glass-card w-full max-w-md mx-4 p-6 rounded-2xl">
+            <div class="flex justify-between items-center mb-5">
+                <h2 id="formTitle" class="text-xl font-semibold" style="color: var(--text-primary);">Tambah Link</h2>
+                <button id="closeOverlayBtn" class="transition-colors" style="color: var(--text-secondary);"><i class="ph ph-x icon-lg"></i></button>
+            </div>
+            <form id="linkForm" class="space-y-4">
+                <input type="hidden" id="editId" value="">
+                <div>
+                    <label class="block text-sm font-medium mb-1.5" style="color: var(--text-secondary);">URL Website</label>
+                    <div class="relative">
+                        <input type="text" id="urlInput" required class="w-full rounded-xl px-4 py-3 pr-12 focus:ring-0" style="background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-primary);" placeholder="zero99gmail.com">
+                        <button type="button" id="fetchIconBtn" class="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-lg transition-all" style="color: var(--accent-text);" title="Ambil icon">
+                            <i class="ph ph-sparkle icon-md"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="p-4 rounded-xl" style="background: var(--bg-input); border: 1px solid var(--border-color);">
+                    <div class="flex items-center gap-4">
+                        <div class="icon-preview-box" id="iconPreviewBox">
+                            <i class="ph ph-globe icon-xl" style="color: var(--text-muted);"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium mb-1" style="color: var(--text-primary);">Preview Icon</p>
+                            <p class="text-xs" id="iconStatus" style="color: var(--text-muted);">Masukkan URL untuk memuat icon</p>
+                        </div>
+                        <button type="button" id="refreshIconBtn" class="p-2 rounded-lg transition-all" style="color: var(--text-secondary);" title="Refresh">
+                            <i class="ph ph-arrows-clockwise icon-md"></i>
+                        </button>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1.5" style="color: var(--text-secondary);">Judul</label>
+                    <input type="text" id="titleInput" required class="w-full rounded-xl px-4 py-3 focus:ring-0" style="background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-primary);" placeholder="Contoh: Google">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1.5" style="color: var(--text-secondary);">Catatan (opsional)</label>
+                    <textarea id="notesInput" rows="2" class="w-full rounded-xl px-4 py-3 focus:ring-0 resize-none" style="background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-primary);" placeholder="Catatan kecil tentang link ini..."></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2" style="color: var(--text-secondary);">Sumber Icon</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button type="button" data-mode="auto" class="icon-mode-btn px-3 py-2 rounded-lg text-xs font-medium transition-all flex items-center justify-center gap-1.5" style="border: 1px solid var(--accent-border); background: var(--accent-glow); color: var(--accent-text);">
+                            <i class="ph ph-sparkle icon-sm"></i> Otomatis
+                        </button>
+                        <button type="button" data-mode="manual" class="icon-mode-btn px-3 py-2 rounded-lg text-xs font-medium transition-all flex items-center justify-center gap-1.5" style="border: 1px solid var(--border-color); background: var(--bg-input); color: var(--text-secondary);">
+                            <i class="ph ph-pencil-simple icon-sm"></i> Manual
+                        </button>
+                    </div>
+                </div>
+                <div id="manualIconSection" class="hidden">
+                    <label class="block text-sm font-medium mb-1.5" style="color: var(--text-secondary);">Kelas Icon</label>
+                    <input type="text" id="iconInput" class="w-full rounded-xl px-4 py-3 focus:ring-0" style="background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-primary);" placeholder="ph ph-globe" value="ph ph-globe">
+                </div>
+                <input type="hidden" id="iconValue" value="">
+                <div class="flex gap-3 pt-2">
+                    <button type="submit" class="btn-accent flex-1 py-3 rounded-xl font-medium text-sm flex items-center justify-center gap-2">
+                        <i class="ph ph-floppy-disk icon-md"></i> Simpan
+                    </button>
+                    <button type="button" id="cancelBtn" class="flex-1 py-3 rounded-xl font-medium text-sm flex items-center justify-center gap-2 transition-colors" style="background: var(--bg-input); color: var(--text-primary);">
+                        <i class="ph ph-x icon-md"></i> Batal
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Overlay -->
+    <div id="deleteOverlay" class="overlay">
+        <div class="overlay-content glass-card w-full max-w-sm mx-4 p-6 rounded-2xl">
+            <div class="text-center">
+                <i class="ph ph-warning text-4xl mb-4" style="color: #fbbf24;"></i>
+                <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">Hapus Link?</h3>
+                <p class="text-sm mb-5" style="color: var(--text-secondary);">Tindakan ini tidak dapat dibatalkan.</p>
+                <div class="flex gap-3">
+                    <button id="confirmDeleteBtn" class="bg-rose-600/80 hover:bg-rose-600 flex-1 py-2.5 rounded-xl text-sm font-medium transition-colors">Hapus</button>
+                    <button id="cancelDeleteBtn" class="flex-1 py-2.5 rounded-xl text-sm font-medium transition-colors" style="background: var(--bg-input); color: var(--text-primary);">Batal</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast">
+        <i id="toastIcon" class="ph ph-check-circle icon-md" style="color: var(--accent-text);"></i>
+        <span id="toastMsg">Berhasil</span>
+    </div>
+
+    <script>
+        (function() {
+            'use strict';
+
+            const KEYS = {
+                LINKS: 'joh4nity_links_v7',
+                THEME: 'joh4nity_theme_v4',
+                MODE: 'joh4nity_mode_v2',
+                HISTORY: 'joh4nity_history_v4',
+                STATS: 'joh4nity_stats_v4',
+                LOCK: 'joh4nity_lock_v4',
+                SETTINGS: 'joh4nity_settings_v2',
+                SNAKE_BEST: 'joh4nity_snake_best_v2'
+            };
+
+            const THEMES = {
+                gold: { name: 'Gold', c1: '#B8860B', c2: '#8B6508', h1: '#D4AF37', h2: '#B8860B', glow: 'rgba(212, 175, 55, 0.4)', text: '#F5D77A', border: 'rgba(212, 175, 55, 0.35)' },
+                indigo: { name: 'Indigo', c1: '#3a4b8c', c2: '#2a3a6a', h1: '#4a5da0', h2: '#35477a', glow: 'rgba(95, 127, 255, 0.4)', text: '#a5b4ff', border: 'rgba(120, 140, 255, 0.3)' },
+                violet: { name: 'Violet', c1: '#6d3a8c', c2: '#4a2a6a', h1: '#8a4aa0', h2: '#5f357a', glow: 'rgba(167, 107, 255, 0.4)', text: '#c4a5ff', border: 'rgba(167, 107, 255, 0.3)' },
+                emerald: { name: 'Emerald', c1: '#2a6a4a', c2: '#1e5036', h1: '#3a8a5f', h2: '#2a6a4a', glow: 'rgba(52, 211, 153, 0.4)', text: '#6ee7b7', border: 'rgba(52, 211, 153, 0.3)' },
+                rose: { name: 'Rose', c1: '#8c3a52', c2: '#6a2a3d', h1: '#a04a62', h2: '#7a3548', glow: 'rgba(244, 114, 182, 0.4)', text: '#f9a8d4', border: 'rgba(244, 114, 182, 0.3)' },
+                cyan: { name: 'Cyan', c1: '#2a6a8c', c2: '#1e4e6a', h1: '#3a82a0', h2: '#2a5f7a', glow: 'rgba(34, 211, 238, 0.4)', text: '#67e8f9', border: 'rgba(34, 211, 238, 0.3)' }
+            };
+
+            let currentTheme = 'gold';
+            let currentMode = 'dark';
+            let settings = { particles: true };
+
+            function applyTheme(themeKey) {
+                const theme = THEMES[themeKey];
+                if (!theme) return;
+                const root = document.documentElement;
+                root.style.setProperty('--accent-1', theme.c1);
+                root.style.setProperty('--accent-2', theme.c2);
+                root.style.setProperty('--accent-hover-1', theme.h1);
+                root.style.setProperty('--accent-hover-2', theme.h2);
+                root.style.setProperty('--accent-glow', theme.glow);
+                root.style.setProperty('--accent-border', theme.border);
+                if (currentMode !== 'light') root.style.setProperty('--accent-text', theme.text);
+                currentTheme = themeKey;
+                localStorage.setItem(KEYS.THEME, themeKey);
+                document.querySelectorAll('.theme-color-btn').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.theme === themeKey);
+                });
+            }
+
+            function applyMode(mode) {
+                currentMode = mode;
+                const root = document.documentElement;
+                const themeIcon = document.getElementById('themeIcon');
+                const metaThemeColor = document.getElementById('metaThemeColor');
+                let actualMode = mode;
+                if (mode === 'auto') {
+                    actualMode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                }
+                root.setAttribute('data-theme', actualMode);
+                metaThemeColor.setAttribute('content', actualMode === 'dark' ? '#0a0c14' : '#f1f5f9');
+                if (themeIcon) {
+                    if (mode === 'auto') themeIcon.className = 'ph ph-circle-half-tilt icon-md';
+                    else if (mode === 'light') themeIcon.className = 'ph ph-moon icon-md';
+                    else themeIcon.className = 'ph ph-sun icon-md';
+                }
+                if (actualMode === 'light') {
+                    root.style.setProperty('--accent-text', THEMES[currentTheme].c1);
+                } else {
+                    root.style.setProperty('--accent-text', THEMES[currentTheme].text);
+                }
+                localStorage.setItem(KEYS.MODE, mode);
+            }
+
+            function initParticles() {
+                const container = document.getElementById('particlesBg');
+                if (!container) return;
+                if (!settings.particles) { container.innerHTML = ''; return; }
+                container.innerHTML = '';
+                for (let i = 0; i < 25; i++) {
+                    const p = document.createElement('div');
+                    p.className = 'particle';
+                    p.style.left = Math.random() * 100 + '%';
+                    p.style.animationDuration = (15 + Math.random() * 20) + 's';
+                    p.style.animationDelay = (-Math.random() * 20) + 's';
+                    p.style.width = p.style.height = (2 + Math.random() * 4) + 'px';
+                    p.style.opacity = 0.1 + Math.random() * 0.2;
+                    container.appendChild(p);
+                }
+            }
+
+            function extractDomain(url) {
+                if (!url) return '';
+                let cleaned = url.trim().replace(/^https?:\/\//i, '').replace(/^www\./i, '');
+                return cleaned.split('/')[0].split('?')[0].split('#')[0];
+            }
+            function isValidUrl(url) {
+                if (!url) return false;
+                return /^[\w-]+(\.[\w-]+)+$/.test(extractDomain(url));
+            }
+            function getFaviconUrls(url) {
+                const domain = extractDomain(url);
+                if (!domain) return [];
+                return [
+                    `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=64`,
+                    `https://icons.duckduckgo.com/ip3/${domain}.ico`,
+                    `https://${domain}/favicon.ico`,
+                    `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=128`
+                ];
+            }
+            function loadFavicon(url) {
+                return new Promise((resolve, reject) => {
+                    const candidates = getFaviconUrls(url);
+                    if (!candidates.length) return reject(new Error('Invalid URL'));
+                    let index = 0;
+                    function tryNext() {
+                        if (index >= candidates.length) return reject(new Error('All failed'));
+                        const candidate = candidates[index++];
+                        const img = new Image();
+                        img.referrerPolicy = 'no-referrer';
+                        img.onload = () => { if (img.naturalWidth > 0) resolve(candidate); else tryNext(); };
+                        img.onerror = () => tryNext();
+                        setTimeout(() => { if (!img.complete) { img.src = ''; tryNext(); } }, 3000);
+                        img.src = candidate;
+                    }
+                    tryNext();
+                });
+            }
+            function renderIcon(iconStr, sizeClass = 'icon-lg') {
+                if (!iconStr) iconStr = 'ph ph-globe';
+                if (iconStr.startsWith('http://') || iconStr.startsWith('https://') || iconStr.startsWith('data:image')) {
+                    return `<img src="${iconStr}" alt="icon" class="favicon-img" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23D4AF37%22 stroke-width=%222%22><circle cx=%2212%22 cy=%2212%22 r=%2210%22/><path d=%22M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z%22/></svg>';" />`;
+                }
+                if (iconStr.includes(':')) {
+                    return `<iconify-icon icon="${iconStr}" style="font-size: 1.5em;"></iconify-icon>`;
+                }
+                return `<i class="${iconStr} ${sizeClass}"></i>`;
+            }
+
+            const defaultLinks = [
+                { id: '1', title: 'Google', url: 'https://www.google.com', icon: 'https://www.google.com/s2/favicons?domain=google.com&sz=64', notes: '' },
+                { id: '2', title: 'GitHub', url: 'https://github.com', icon: 'https://www.google.com/s2/favicons?domain=github.com&sz=64', notes: 'Repo proyek & kolaborasi' },
+                { id: '3', title: 'YouTube', url: 'https://www.youtube.com', icon: 'https://www.google.com/s2/favicons?domain=youtube.com&sz=64', notes: '' },
+                { id: '4', title: 'Wikipedia', url: 'https://www.wikipedia.org', icon: 'https://www.google.com/s2/favicons?domain=wikipedia.org&sz=64', notes: '' },
+                { id: '5', title: 'ChatGPT', url: 'https://chat.openai.com', icon: 'https://www.google.com/s2/favicons?domain=openai.com&sz=64', notes: 'Asisten AI harian' },
+                { id: '6', title: 'Stack Overflow', url: 'https://stackoverflow.com', icon: 'https://www.google.com/s2/favicons?domain=stackoverflow.com&sz=64', notes: '' }
+            ];
+
+            let links = [];
+            let stats = { opens: {}, totalOpens: 0, lastOpens: [] };
+            let history = [];
+            let lockData = { enabled: false, pin: null };
+
+            function loadAllData() {
+                try {
+                    const stored = localStorage.getItem(KEYS.LINKS);
+                    links = stored ? JSON.parse(stored) : [...defaultLinks];
+                    links = links.map(l => ({ ...l, notes: l.notes || '' }));
+                } catch (e) { links = [...defaultLinks]; }
+                try { const s = localStorage.getItem(KEYS.STATS); stats = s ? JSON.parse(s) : { opens: {}, totalOpens: 0, lastOpens: [] }; } catch (e) {}
+                try { const h = localStorage.getItem(KEYS.HISTORY); history = h ? JSON.parse(h) : []; } catch (e) {}
+                try { const l = localStorage.getItem(KEYS.LOCK); lockData = l ? JSON.parse(l) : { enabled: false, pin: null }; } catch (e) {}
+                try { const st = localStorage.getItem(KEYS.SETTINGS); settings = st ? { ...settings, ...JSON.parse(st) } : settings; } catch (e) {}
+                applyTheme(localStorage.getItem(KEYS.THEME) || 'gold');
+                applyMode(localStorage.getItem(KEYS.MODE) || 'dark');
+            }
+
+            function saveLinks() { localStorage.setItem(KEYS.LINKS, JSON.stringify(links)); renderQuickLaunch(); updateStats(); }
+            function saveStats() { localStorage.setItem(KEYS.STATS, JSON.stringify(stats)); updateStats(); }
+            function saveHistory() { localStorage.setItem(KEYS.HISTORY, JSON.stringify(history.slice(-50))); renderHistory(); }
+            function saveLock() { localStorage.setItem(KEYS.LOCK, JSON.stringify(lockData)); }
+            function saveSettings() { localStorage.setItem(KEYS.SETTINGS, JSON.stringify(settings)); }
+
+            function escapeHtml(text) {
+                if (!text) return '';
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            function showToast(msg, type = 'success') {
+                const toast = document.getElementById('toast');
+                const toastIcon = document.getElementById('toastIcon');
+                const toastMsg = document.getElementById('toastMsg');
+                toastMsg.textContent = msg;
+                toast.className = 'toast show ' + type;
+                toastIcon.className = type === 'success' ? 'ph ph-check-circle icon-md' : 'ph ph-x-circle icon-md';
+                toastIcon.style.color = type === 'success' ? 'var(--accent-text)' : '#fb7185';
+                clearTimeout(window._toastTimeout);
+                window._toastTimeout = setTimeout(() => toast.classList.remove('show'), 2500);
+            }
+
+            function recordOpen(link) {
+                stats.opens[link.url] = (stats.opens[link.url] || 0) + 1;
+                stats.totalOpens++;
+                stats.lastOpens.push({ url: link.url, title: link.title, icon: link.icon, time: Date.now() });
+                if (stats.lastOpens.length > 200) stats.lastOpens = stats.lastOpens.slice(-200);
+                saveStats();
+                history.unshift({ url: link.url, title: link.title, icon: link.icon, time: Date.now() });
+                history = history.slice(0, 10);
+                saveHistory();
+            }
+
+            function updateStats() {
+                const totalLinks = links.length;
+                const today = new Date().toISOString().split('T')[0];
+                const todayOpens = stats.lastOpens.filter(o => new Date(o.time).toISOString().split('T')[0] === today).length;
+                let topUrl = null, topCount = 0;
+                for (const [url, count] of Object.entries(stats.opens)) {
+                    if (count > topCount) { topCount = count; topUrl = url; }
+                }
+                const topLink = links.find(l => l.url === topUrl);
+                document.getElementById('statTotalLinks').textContent = totalLinks;
+                document.getElementById('statTodayOpens').textContent = todayOpens;
+                document.getElementById('statTotalOpens').textContent = stats.totalOpens;
+                document.getElementById('statTopLink').textContent = topLink ? topLink.title : '—';
+                const statsDetail = document.getElementById('statsDetail');
+                if (statsDetail) {
+                    const uniqueDomains = new Set(links.map(l => extractDomain(l.url))).size;
+                    const linksWithNotes = links.filter(l => l.notes).length;
+                    statsDetail.innerHTML = `
+                        <div class="flex justify-between"><span style="color: var(--text-secondary);">Total link</span><span class="font-medium" style="color: var(--text-primary);">${totalLinks}</span></div>
+                        <div class="flex justify-between"><span style="color: var(--text-secondary);">Total kunjungan</span><span class="font-medium" style="color: var(--text-primary);">${stats.totalOpens}</span></div>
+                        <div class="flex justify-between"><span style="color: var(--text-secondary);">Dibuka hari ini</span><span class="font-medium" style="color: var(--text-primary);">${todayOpens}</span></div>
+                        <div class="flex justify-between"><span style="color: var(--text-secondary);">Link punya catatan</span><span class="font-medium" style="color: var(--text-primary);">${linksWithNotes}</span></div>
+                        <div class="flex justify-between"><span style="color: var(--text-secondary);">Domain unik</span><span class="font-medium" style="color: var(--text-primary);">${uniqueDomains}</span></div>
+                    `;
+                }
+            }
+
+            function renderHistory() {
+                const list = document.getElementById('historyList');
+                if (!list) return;
+                list.innerHTML = '';
+                if (!history.length) {
+                    list.innerHTML = `<div class="col-span-full text-center text-sm py-4" style="color: var(--text-muted);">Belum ada riwayat.</div>`;
+                    return;
+                }
+                history.forEach(item => {
+                    const el = document.createElement('div');
+                    el.className = 'history-item';
+                    el.innerHTML = `
+                        <div class="w-8 h-8 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0" style="background: var(--bg-card);">
+                            ${renderIcon(item.icon, 'icon-sm')}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm truncate" style="color: var(--text-primary);">${escapeHtml(item.title)}</p>
+                            <p class="text-xs truncate" style="color: var(--text-muted);">${escapeHtml(extractDomain(item.url))}</p>
+                        </div>
+                        <span class="history-time">${timeAgo(item.time)}</span>
+                    `;
+                    el.addEventListener('click', () => openBrowser(item.url, item.title));
+                    list.appendChild(el);
+                });
+            }
+
+            function timeAgo(ts) {
+                const diff = Date.now() - ts;
+                const min = Math.floor(diff / 60000);
+                if (min < 1) return 'baru';
+                if (min < 60) return min + 'm';
+                const hr = Math.floor(min / 60);
+                if (hr < 24) return hr + 'j';
+                return Math.floor(hr / 24) + 'h';
+            }
+
+            let pinBuffer = '';
+            let pinSetupBuffer = '';
+            let pinSetupStage = 'enter';
+            let pinSetupTempPin = '';
+            let isLocked = false;
+            let clockInterval = null;
+
+            function setupLockScreen() {
+                const dots = document.getElementById('pinDots');
+                const keypad = document.getElementById('pinKeypad');
+                const messageEl = document.getElementById('pinMessage');
+                if (!dots || !keypad) return;
+                function updateClock() {
+                    const now = new Date();
+                    const hh = String(now.getHours()).padStart(2, '0');
+                    const mm = String(now.getMinutes()).padStart(2, '0');
+                    const clockEl = document.getElementById('lockClock');
+                    const dateEl = document.getElementById('lockDate');
+                    if (clockEl) clockEl.textContent = `${hh}:${mm}`;
+                    if (dateEl) {
+                        const days = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+                        const months = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+                        dateEl.textContent = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]}`;
+                    }
+                }
+                updateClock();
+                if (clockInterval) clearInterval(clockInterval);
+                clockInterval = setInterval(updateClock, 1000);
+                function renderDots() {
+                    dots.innerHTML = '';
+                    const maxDots = lockData.pin ? lockData.pin.length : 4;
+                    for (let i = 0; i < maxDots; i++) {
+                        const dot = document.createElement('div');
+                        dot.className = 'pin-dot' + (i < pinBuffer.length ? ' filled' : '');
+                        dots.appendChild(dot);
+                    }
+                }
+                function renderKeypad() {
+                    keypad.innerHTML = '';
+                    const keys = ['1','2','3','4','5','6','7','8','9','empty','0','backspace'];
+                    keys.forEach(k => {
+                        const btn = document.createElement('button');
+                        btn.type = 'button';
+                        btn.className = 'pin-keypad-btn';
+                        if (k === 'empty') btn.classList.add('empty');
+                        else if (k === 'backspace') { btn.classList.add('backspace'); btn.innerHTML = '<i class="ph ph-backspace" style="font-size: 24px;"></i>'; }
+                        else btn.textContent = k;
+                        btn.addEventListener('click', (e) => {
+                            if (k === 'empty') return;
+                            const rect = btn.getBoundingClientRect();
+                            const ripple = document.createElement('span');
+                            ripple.className = 'ripple';
+                            const size = Math.max(rect.width, rect.height);
+                            ripple.style.width = ripple.style.height = size + 'px';
+                            ripple.style.left = (e.clientX - rect.left - size/2) + 'px';
+                            ripple.style.top = (e.clientY - rect.top - size/2) + 'px';
+                            btn.appendChild(ripple);
+                            setTimeout(() => ripple.remove(), 600);
+                            handlePinKey(k);
+                        });
+                        keypad.appendChild(btn);
+                    });
+                }
+                function showMessage(text, type = 'error') {
+                    if (!messageEl) return;
+                    messageEl.className = 'pin-message show ' + type;
+                    const iconMap = { error: 'ph-warning-circle', success: 'ph-check-circle', info: 'ph-info' };
+                    messageEl.innerHTML = `<i class="ph ${iconMap[type] || 'ph-info'}"></i> ${text}`;
+                }
+                function clearMessage() {
+                    if (!messageEl) return;
+                    messageEl.className = 'pin-message';
+                    messageEl.innerHTML = '';
+                }
+                function handlePinKey(k) {
+                    clearMessage();
+                    if (k === 'backspace') { pinBuffer = pinBuffer.slice(0, -1); renderDots(); return; }
+                    if (pinBuffer.length >= 6) return;
+                    if (lockData.pin && pinBuffer.length >= lockData.pin.length) return;
+                    pinBuffer += k;
+                    renderDots();
+                    if (navigator.vibrate) navigator.vibrate(10);
+                    if (lockData.pin && pinBuffer.length === lockData.pin.length) setTimeout(() => verifyPin(), 250);
+                }
+                function verifyPin() {
+                    if (pinBuffer === lockData.pin) {
+                        showMessage('PIN benar!', 'success');
+                        const successEl = document.getElementById('lockSuccess');
+                        if (successEl) successEl.classList.add('show');
+                        setTimeout(() => {
+                            isLocked = false;
+                            document.getElementById('lockScreen').classList.remove('active');
+                            setTimeout(() => { if (successEl) successEl.classList.remove('show'); }, 300);
+                            pinBuffer = '';
+                            renderDots();
+                            clearMessage();
+                        }, 900);
+                    } else {
+                        showMessage('PIN salah, coba lagi', 'error');
+                        const content = document.querySelector('.lock-content');
+                        if (content) { content.classList.add('shake'); setTimeout(() => content.classList.remove('shake'), 600); }
+                        if (navigator.vibrate) navigator.vibrate([50, 30, 50]);
+                        pinBuffer = '';
+                        setTimeout(() => { renderDots(); clearMessage(); }, 900);
+                    }
+                }
+                if (window._lockKeyboardHandler) window.removeEventListener('keydown', window._lockKeyboardHandler);
+                window._lockKeyboardHandler = (e) => {
+                    if (!document.getElementById('lockScreen')?.classList.contains('active')) return;
+                    if (/^\d$/.test(e.key)) handlePinKey(e.key);
+                    else if (e.key === 'Backspace') handlePinKey('backspace');
+                    else if (e.key === 'Enter' && lockData.pin && pinBuffer.length === lockData.pin.length) verifyPin();
+                };
+                window.addEventListener('keydown', window._lockKeyboardHandler);
+                window._renderLockDots = renderDots;
+                window._renderLockKeypad = renderKeypad;
+                window._clearLockMessage = clearMessage;
+            }
+
+            function showLockScreen() {
+                isLocked = true;
+                pinBuffer = '';
+                document.getElementById('lockScreen').classList.add('active');
+                if (window._renderLockDots) window._renderLockDots();
+                if (window._renderLockKeypad) window._renderLockKeypad();
+                if (window._clearLockMessage) window._clearLockMessage();
+            }
+
+            function setupPinSetup() {
+                const dots = document.getElementById('pinSetupDots');
+                const keypad = document.getElementById('pinSetupKeypad');
+                const messageEl = document.getElementById('pinSetupMessage');
+                if (!dots || !keypad) return;
+                function renderDots() {
+                    dots.innerHTML = '';
+                    for (let i = 0; i < 6; i++) {
+                        const dot = document.createElement('div');
+                        dot.className = 'pin-dot' + (i < pinSetupBuffer.length ? ' filled' : '');
+                        dots.appendChild(dot);
+                    }
+                }
+                function renderKeypad() {
+                    keypad.innerHTML = '';
+                    const keys = ['1','2','3','4','5','6','7','8','9','empty','0','backspace'];
+                    keys.forEach(k => {
+                        const btn = document.createElement('button');
+                        btn.type = 'button';
+                        btn.className = 'pin-keypad-btn';
+                        if (k === 'empty') btn.classList.add('empty');
+                        else if (k === 'backspace') { btn.classList.add('backspace'); btn.innerHTML = '<i class="ph ph-backspace" style="font-size: 24px;"></i>'; }
+                        else btn.textContent = k;
+                        btn.addEventListener('click', (e) => {
+                            if (k === 'empty') return;
+                            const rect = btn.getBoundingClientRect();
+                            const ripple = document.createElement('span');
+                            ripple.className = 'ripple';
+                            const size = Math.max(rect.width, rect.height);
+                            ripple.style.width = ripple.style.height = size + 'px';
+                            ripple.style.left = (e.clientX - rect.left - size/2) + 'px';
+                            ripple.style.top = (e.clientY - rect.top - size/2) + 'px';
+                            btn.appendChild(ripple);
+                            setTimeout(() => ripple.remove(), 600);
+                            if (messageEl) { messageEl.className = 'pin-message'; messageEl.innerHTML = ''; }
+                            if (k === 'backspace') pinSetupBuffer = pinSetupBuffer.slice(0, -1);
+                            else if (pinSetupBuffer.length < 6) pinSetupBuffer += k;
+                            renderDots();
+                        });
+                        keypad.appendChild(btn);
+                    });
+                }
+                window._renderSetupDots = renderDots;
+                window._renderSetupKeypad = renderKeypad;
+            }
+
+            function openPinSetup(mode = 'set') {
+                pinSetupStage = 'enter';
+                pinSetupBuffer = '';
+                pinSetupTempPin = '';
+                document.getElementById('pinSetupTitle').textContent = mode === 'set' ? 'Atur PIN Baru' : 'Ganti PIN';
+                document.getElementById('pinSetupDesc').textContent = 'Masukkan 4-6 digit PIN';
+                document.getElementById('pinSetupMessage').className = 'pin-message';
+                document.getElementById('pinSetupMessage').innerHTML = '';
+                document.getElementById('pinSetupOverlay').classList.add('active');
+                document.body.style.overflow = 'hidden';
+                if (window._renderSetupDots) window._renderSetupDots();
+                if (window._renderSetupKeypad) window._renderSetupKeypad();
+            }
+
+            function handlePinSetupConfirm() {
+                const msg = document.getElementById('pinSetupMessage');
+                const showMsg = (text, type) => {
+                    msg.className = 'pin-message show ' + type;
+                    const icon = type === 'error' ? 'ph-warning-circle' : type === 'success' ? 'ph-check-circle' : 'ph-info';
+                    msg.innerHTML = `<i class="ph ${icon}"></i> ${text}`;
+                };
+                if (pinSetupBuffer.length < 4) { showMsg('Minimal 4 digit', 'error'); return; }
+                if (pinSetupStage === 'enter') {
+                    pinSetupTempPin = pinSetupBuffer;
+                    pinSetupBuffer = '';
+                    pinSetupStage = 'confirm';
+                    document.getElementById('pinSetupDesc').textContent = 'Konfirmasi PIN Anda';
+                    if (window._renderSetupDots) window._renderSetupDots();
+                    msg.className = 'pin-message';
+                    msg.innerHTML = '';
+                } else {
+                    if (pinSetupBuffer !== pinSetupTempPin) {
+                        showMsg('PIN tidak sama, ulangi', 'error');
+                        document.querySelector('#pinSetupOverlay .overlay-content').classList.add('shake');
+                        setTimeout(() => document.querySelector('#pinSetupOverlay .overlay-content').classList.remove('shake'), 600);
+                        pinSetupStage = 'enter';
+                        pinSetupBuffer = '';
+                        pinSetupTempPin = '';
+                        document.getElementById('pinSetupDesc').textContent = 'Masukkan 4-6 digit PIN';
+                        setTimeout(() => { if (window._renderSetupDots) window._renderSetupDots(); msg.className = 'pin-message'; msg.innerHTML = ''; }, 900);
+                        return;
+                    }
+                    lockData.enabled = true;
+                    lockData.pin = pinSetupBuffer;
+                    saveLock();
+                    updateLockUI();
+                    document.getElementById('pinSetupOverlay').classList.remove('active');
+                    document.body.style.overflow = '';
+                    showToast('PIN berhasil disimpan 🔒');
+                }
+            }
+
+            function updateLockUI() {
+                const status = document.getElementById('lockStatus');
+                const toggleBtn = document.getElementById('toggleLockBtn');
+                const changeBtn = document.getElementById('changePinBtn');
+                if (lockData.enabled) {
+                    status.textContent = 'Aktif — ' + (lockData.pin ? lockData.pin.length : 0) + ' digit';
+                    status.style.color = '#10b981';
+                    toggleBtn.textContent = 'Matikan';
+                    changeBtn.classList.remove('hidden');
+                } else {
+                    status.textContent = 'Belum aktif';
+                    status.style.color = '';
+                    toggleBtn.textContent = 'Aktifkan';
+                    changeBtn.classList.add('hidden');
+                }
+            }
+
+            const cardGrid = document.getElementById('cardGrid');
+
+            function renderCards() {
+                if (!cardGrid) return;
+                cardGrid.innerHTML = '';
+                if (!links.length) {
+                    cardGrid.innerHTML = `<div class="col-span-full text-center py-12" style="color: var(--text-muted);">Belum ada link. Klik "Tambah" untuk memulai.</div>`;
+                    return;
+                }
+                links.forEach((link, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'glass-card link-card card-animate cursor-pointer group';
+                    if (link.notes) card.classList.add('has-notes');
+                    card.style.animationDelay = `${index * 0.06}s`;
+                    card.innerHTML = `
+                        <div class="notes-indicator" title="Ada catatan"></div>
+                        ${link.notes ? `
+                            <div class="notes-popup has-content">
+                                <div class="flex items-center gap-1.5 mb-2">
+                                    <i class="ph ph-note-pencil icon-sm" style="color: var(--accent-text);"></i>
+                                    <span class="text-xs font-semibold" style="color: var(--text-primary);">Catatan</span>
+                                </div>
+                                <p class="text-xs leading-relaxed" style="color: var(--text-secondary);">${escapeHtml(link.notes)}</p>
+                            </div>
+                        ` : ''}
+                        <div class="link-card-header">
+                            <div class="link-card-info">
+                                <div class="link-icon-box">
+                                    ${renderIcon(link.icon, 'icon-lg')}
+                                </div>
+                                <div class="link-title-wrap">
+                                    <h3 class="link-title">${escapeHtml(link.title)}</h3>
+                                    <p class="link-url">${escapeHtml(extractDomain(link.url))}</p>
+                                </div>
+                            </div>
+                            <div class="link-card-actions">
+                                <button class="link-action-btn edit-btn" data-id="${link.id}" title="Edit">
+                                    <i class="ph ph-pencil-simple icon-md"></i>
+                                </button>
+                                <button class="link-action-btn delete-btn" data-id="${link.id}" title="Hapus">
+                                    <i class="ph ph-trash icon-md"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="link-card-footer">
+                            <span class="link-open-label">
+                                <i class="ph ph-arrow-square-out icon-xs"></i> Buka Link
+                            </span>
+                            <i class="ph ph-caret-right link-caret icon-md"></i>
+                        </div>
+                    `;
+                    card.addEventListener('mousemove', (e) => {
+                        const rect = card.getBoundingClientRect();
+                        card.style.setProperty('--mx', ((e.clientX - rect.left) / rect.width * 100) + '%');
+                        card.style.setProperty('--my', ((e.clientY - rect.top) / rect.height * 100) + '%');
+                    });
+                    card.addEventListener('click', (e) => {
+                        if (e.target.closest('.edit-btn') || e.target.closest('.delete-btn')) return;
+                        recordOpen(link);
+                        openBrowser(link.url, link.title);
+                    });
+                    cardGrid.appendChild(card);
+                });
+                document.querySelectorAll('.edit-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => { e.stopPropagation(); openEditForm(btn.dataset.id); });
+                });
+                document.querySelectorAll('.delete-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => { e.stopPropagation(); openDeleteConfirm(btn.dataset.id); });
+                });
+            }
+
+            const overlay = document.getElementById('overlay');
+            const deleteOverlay = document.getElementById('deleteOverlay');
+            const formTitle = document.getElementById('formTitle');
+            const linkForm = document.getElementById('linkForm');
+            const editIdInput = document.getElementById('editId');
+            const titleInput = document.getElementById('titleInput');
+            const urlInput = document.getElementById('urlInput');
+            const notesInput = document.getElementById('notesInput');
+            const iconInput = document.getElementById('iconInput');
+            const iconValue = document.getElementById('iconValue');
+            const iconPreviewBox = document.getElementById('iconPreviewBox');
+            const iconStatus = document.getElementById('iconStatus');
+            const fetchIconBtn = document.getElementById('fetchIconBtn');
+            const refreshIconBtn = document.getElementById('refreshIconBtn');
+            const manualIconSection = document.getElementById('manualIconSection');
+            const addBtn = document.getElementById('addBtn');
+            const closeOverlayBtn = document.getElementById('closeOverlayBtn');
+            const cancelBtn = document.getElementById('cancelBtn');
+            const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+            const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+
+            let deleteTargetId = null;
+            let iconMode = 'auto';
+
+            document.querySelectorAll('.icon-mode-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    iconMode = btn.dataset.mode;
+                    document.querySelectorAll('.icon-mode-btn').forEach(b => {
+                        b.style.border = '1px solid var(--border-color)';
+                        b.style.background = 'var(--bg-input)';
+                        b.style.color = 'var(--text-secondary)';
+                    });
+                    btn.style.border = '1px solid var(--accent-border)';
+                    btn.style.background = 'var(--accent-glow)';
+                    btn.style.color = 'var(--accent-text)';
+                    if (iconMode === 'manual') {
+                        manualIconSection.classList.remove('hidden');
+                        updateIconPreviewFromManual();
+                    } else {
+                        manualIconSection.classList.add('hidden');
+                        if (urlInput.value.trim()) autoFetchIcon();
+                    }
+                });
+            });
+
+            function updateIconPreviewFromManual() {
+                const val = iconInput.value.trim() || 'ph ph-globe';
+                iconPreviewBox.innerHTML = renderIcon(val, 'icon-xl');
+                iconStatus.textContent = val;
+                iconValue.value = val;
+            }
+            iconInput.addEventListener('input', updateIconPreviewFromManual);
+
+            async function autoFetchIcon() {
+                const url = urlInput.value.trim();
+                if (!url) {
+                    iconPreviewBox.innerHTML = '<i class="ph ph-globe icon-xl" style="color: var(--text-muted);"></i>';
+                    iconStatus.textContent = 'Masukkan URL untuk memuat icon';
+                    iconValue.value = '';
+                    return;
+                }
+                if (!isValidUrl(url)) {
+                    iconPreviewBox.innerHTML = '<i class="ph ph-warning-circle icon-xl" style="color: #fbbf24;"></i>';
+                    iconStatus.textContent = 'URL tidak valid';
+                    return;
+                }
+                iconPreviewBox.innerHTML = '<i class="ph ph-circle-notch icon-xl spin" style="color: var(--accent-text);"></i>';
+                iconStatus.textContent = 'Mengambil icon dari ' + extractDomain(url) + '...';
+                try {
+                    const faviconUrl = await loadFavicon(url);
+                    iconPreviewBox.innerHTML = `<img src="${faviconUrl}" alt="favicon" referrerpolicy="no-referrer">`;
+                    iconStatus.textContent = '✓ Icon ditemukan';
+                    iconStatus.style.color = '#10b981';
+                    iconValue.value = faviconUrl;
+                    if (!titleInput.value.trim()) {
+                        const domain = extractDomain(url);
+                        titleInput.value = domain.replace(/\.(com|net|org|id|co|io|dev|app|xyz|site|online|tech|store)$/i, '')
+                            .split(/[.\-]/).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+                    }
+                } catch (err) {
+                    iconPreviewBox.innerHTML = '<i class="ph ph-image-broken icon-xl" style="color: #fbbf24;"></i>';
+                    iconStatus.textContent = 'Icon tidak ditemukan';
+                    iconStatus.style.color = '#fbbf24';
+                    iconValue.value = 'ph ph-globe';
+                }
+            }
+
+            let urlDebounce;
+            urlInput.addEventListener('input', () => {
+                clearTimeout(urlDebounce);
+                if (iconMode !== 'auto') return;
+                if (!urlInput.value.trim()) {
+                    iconPreviewBox.innerHTML = '<i class="ph ph-globe icon-xl" style="color: var(--text-muted);"></i>';
+                    iconStatus.textContent = 'Masukkan URL untuk memuat icon';
+                    iconStatus.style.color = '';
+                    return;
+                }
+                urlDebounce = setTimeout(autoFetchIcon, 700);
+            });
+
+            fetchIconBtn.addEventListener('click', autoFetchIcon);
+            refreshIconBtn.addEventListener('click', () => {
+                if (iconMode === 'auto') autoFetchIcon();
+                else updateIconPreviewFromManual();
+            });
+
+            function openOverlay() { overlay.classList.add('active'); document.body.style.overflow = 'hidden'; }
+            function closeOverlay() {
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+                linkForm.reset();
+                editIdInput.value = '';
+                iconValue.value = '';
+                iconMode = 'auto';
+                document.querySelectorAll('.icon-mode-btn').forEach(b => {
+                    b.style.border = '1px solid var(--border-color)';
+                    b.style.background = 'var(--bg-input)';
+                    b.style.color = 'var(--text-secondary)';
+                });
+                const autoBtn = document.querySelector('.icon-mode-btn[data-mode="auto"]');
+                autoBtn.style.border = '1px solid var(--accent-border)';
+                autoBtn.style.background = 'var(--accent-glow)';
+                autoBtn.style.color = 'var(--accent-text)';
+                manualIconSection.classList.add('hidden');
+                iconPreviewBox.innerHTML = '<i class="ph ph-globe icon-xl" style="color: var(--text-muted);"></i>';
+                iconStatus.textContent = 'Masukkan URL untuk memuat icon';
+                iconStatus.style.color = '';
+            }
+            function openDeleteOverlay() { deleteOverlay.classList.add('active'); document.body.style.overflow = 'hidden'; }
+            function closeDeleteOverlay() { deleteOverlay.classList.remove('active'); document.body.style.overflow = ''; deleteTargetId = null; }
+
+            addBtn.addEventListener('click', () => {
+                formTitle.textContent = 'Tambah Link';
+                editIdInput.value = '';
+                titleInput.value = '';
+                urlInput.value = '';
+                notesInput.value = '';
+                iconInput.value = 'ph ph-globe';
+                iconPreviewBox.innerHTML = '<i class="ph ph-globe icon-xl" style="color: var(--text-muted);"></i>';
+                iconStatus.textContent = 'Masukkan URL untuk memuat icon';
+                openOverlay();
+            });
+
+            closeOverlayBtn.addEventListener('click', closeOverlay);
+            cancelBtn.addEventListener('click', closeOverlay);
+            overlay.addEventListener('click', (e) => { if (e.target === overlay) closeOverlay(); });
+            cancelDeleteBtn.addEventListener('click', closeDeleteOverlay);
+            deleteOverlay.addEventListener('click', (e) => { if (e.target === deleteOverlay) closeDeleteOverlay(); });
+
+            function openEditForm(id) {
+                const link = links.find(l => l.id === id);
+                if (!link) return;
+                formTitle.textContent = 'Edit Link';
+                editIdInput.value = link.id;
+                titleInput.value = link.title;
+                urlInput.value = link.url;
+                notesInput.value = link.notes || '';
+                if (link.icon && (link.icon.startsWith('http') || link.icon.startsWith('data:'))) {
+                    iconMode = 'auto';
+                    manualIconSection.classList.add('hidden');
+                    iconPreviewBox.innerHTML = `<img src="${link.icon}" alt="favicon" referrerpolicy="no-referrer">`;
+                    iconStatus.textContent = '✓ Icon tersimpan';
+                    iconStatus.style.color = '#10b981';
+                    iconValue.value = link.icon;
+                    document.querySelectorAll('.icon-mode-btn').forEach(b => {
+                        b.style.border = '1px solid var(--border-color)';
+                        b.style.background = 'var(--bg-input)';
+                        b.style.color = 'var(--text-secondary)';
+                    });
+                    const autoBtn = document.querySelector('.icon-mode-btn[data-mode="auto"]');
+                    autoBtn.style.border = '1px solid var(--accent-border)';
+                    autoBtn.style.background = 'var(--accent-glow)';
+                    autoBtn.style.color = 'var(--accent-text)';
+                } else {
+                    iconMode = 'manual';
+                    manualIconSection.classList.remove('hidden');
+                    iconInput.value = link.icon || 'ph ph-globe';
+                    updateIconPreviewFromManual();
+                    document.querySelectorAll('.icon-mode-btn').forEach(b => {
+                        b.style.border = '1px solid var(--border-color)';
+                        b.style.background = 'var(--bg-input)';
+                        b.style.color = 'var(--text-secondary)';
+                    });
+                    const manualBtn = document.querySelector('.icon-mode-btn[data-mode="manual"]');
+                    manualBtn.style.border = '1px solid var(--accent-border)';
+                    manualBtn.style.background = 'var(--accent-glow)';
+                    manualBtn.style.color = 'var(--accent-text)';
+                }
+                openOverlay();
+            }
+
+            function openDeleteConfirm(id) { deleteTargetId = id; openDeleteOverlay(); }
+
+            confirmDeleteBtn.addEventListener('click', () => {
+                if (deleteTargetId) {
+                    links = links.filter(l => l.id !== deleteTargetId);
+                    saveLinks();
+                    renderCards();
+                    closeDeleteOverlay();
+                    showToast('Link dihapus', 'error');
+                }
+            });
+
+            linkForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const id = editIdInput.value;
+                const title = titleInput.value.trim();
+                const url = urlInput.value.trim();
+                const notes = notesInput.value.trim();
+                if (!title || !url) return;
+                let finalUrl = url;
+                if (!/^https?:\/\//i.test(url)) finalUrl = 'https://' + url;
+                let finalIcon;
+                if (iconMode === 'auto') {
+                    if (!iconValue.value || !iconValue.value.startsWith('http')) {
+                        try { finalIcon = await loadFavicon(finalUrl); }
+                        catch (e) { finalIcon = 'ph ph-globe'; }
+                    } else finalIcon = iconValue.value;
+                } else finalIcon = iconInput.value.trim() || 'ph ph-globe';
+                if (id) {
+                    const index = links.findIndex(l => l.id === id);
+                    if (index !== -1) links[index] = { ...links[index], title, url: finalUrl, icon: finalIcon, notes };
+                    showToast('Link diperbarui');
+                } else {
+                    const newId = Date.now().toString(36) + Math.random().toString(36).substr(2, 6);
+                    links.push({ id: newId, title, url: finalUrl, icon: finalIcon, notes });
+                    showToast('Link ditambahkan');
+                }
+                saveLinks();
+                renderCards();
+                closeOverlay();
+            });
+
+            const browserPanel = document.getElementById('browserPanel');
+            const siteFrame = document.getElementById('siteFrame');
+            const urlBar = document.getElementById('urlBar');
+            const backBtn = document.getElementById('backBtn');
+            const forwardBtn = document.getElementById('forwardBtn');
+            const reloadBtn = document.getElementById('reloadBtn');
+            const homeBtn = document.getElementById('homeBtn');
+            const goBtn = document.getElementById('goBtn');
+            const closeBrowserBtn = document.getElementById('closeBrowserBtn');
+            const openBrowserBtn = document.getElementById('openBrowserBtn');
+            const openExternalBtn = document.getElementById('openExternalBtn');
+            const copyUrlBtn = document.getElementById('copyUrlBtn');
+            const fullscreenBtn = document.getElementById('fullscreenBtn');
+            const loadingBar = document.getElementById('loadingBar');
+            const blockedMsg = document.getElementById('blockedMsg');
+            const statusText = document.getElementById('statusText');
+            const zoomIndicator = document.getElementById('zoomIndicator');
+            const zoomInBtn = document.getElementById('zoomInBtn');
+            const zoomOutBtn = document.getElementById('zoomOutBtn');
+            const zoomResetBtn = document.getElementById('zoomResetBtn');
+            const quickLaunch = document.getElementById('quickLaunch');
+            const openExternalFromBlocked = document.getElementById('openExternalFromBlocked');
+            const closeFromBlocked = document.getElementById('closeFromBlocked');
+
+            let history_nav = []; let historyIndex = -1; let currentZoom = 100; let blockedUrl = '';
+
+            const KNOWN_BLOCKED = ['google.com','google.co.id','youtube.com','youtu.be','facebook.com','instagram.com','twitter.com','x.com','github.com','stackoverflow.com','openai.com','chat.openai.com','linkedin.com','reddit.com','tiktok.com','netflix.com','amazon.com','microsoft.com','apple.com','whatsapp.com','gmail.com','drive.google.com','docs.google.com','maps.google.com','pinterest.com','twitch.tv','spotify.com','discord.com'];
+
+            function getHostname(url) { try { return new URL(url).hostname.replace(/^www\./, '').toLowerCase(); } catch (e) { return ''; } }
+            function isKnownBlocked(url) { const host = getHostname(url); return KNOWN_BLOCKED.some(d => host === d || host.endsWith('.' + d)); }
+            function normalizeUrl(input) {
+                let url = input.trim();
+                if (!url) return '';
+                if (!/^https?:\/\//i.test(url) && !/^[\w-]+\.[\w.-]+/.test(url)) return 'https://duckduckgo.com/?q=' + encodeURIComponent(url);
+                if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+                return url;
+            }
+            function updateNavButtons() {
+                backBtn.disabled = historyIndex <= 0;
+                forwardBtn.disabled = historyIndex >= history_nav.length - 1;
+            }
+            function setStatus(text, color = '', icon = 'ph-circle-fill') {
+                statusText.innerHTML = `<i class="ph ${icon} ${color} icon-xs"></i> ${text}`;
+            }
+            function startLoading() { loadingBar.classList.add('active'); loadingBar.style.opacity = '1'; setStatus('Memuat...', 'text-amber-400'); }
+            function stopLoading() { loadingBar.classList.remove('active'); loadingBar.style.width = '100%'; setTimeout(() => { loadingBar.style.opacity = '0'; loadingBar.style.width = '0%'; }, 300); }
+            function showBlocked(url, reason = '') {
+                blockedUrl = url; blockedMsg.classList.add('show'); siteFrame.style.display = 'none';
+                setStatus('Diblokir', 'text-amber-400', 'ph-shield-warning');
+                const t = blockedMsg.querySelector('h3');
+                if (t && reason) t.textContent = reason;
+            }
+            function hideBlocked() { blockedMsg.classList.remove('show'); siteFrame.style.display = ''; }
+
+            function loadUrl(url, addToHistory = true) {
+                hideBlocked();
+                urlBar.value = url;
+                if (isKnownBlocked(url)) {
+                    stopLoading();
+                    showBlocked(url, 'Website Menolak Ditampilkan');
+                    if (addToHistory) { history_nav = history_nav.slice(0, historyIndex + 1); history_nav.push(url); historyIndex = history_nav.length - 1; updateNavButtons(); }
+                    return;
+                }
+                startLoading();
+                siteFrame.style.display = '';
+                try { siteFrame.src = url; } catch (e) { showBlocked(url, 'Gagal Memuat'); stopLoading(); return; }
+                if (addToHistory) { history_nav = history_nav.slice(0, historyIndex + 1); history_nav.push(url); historyIndex = history_nav.length - 1; updateNavButtons(); }
+                clearTimeout(window._loadTimeout);
+                window._loadTimeout = setTimeout(() => {
+                    try {
+                        const doc = siteFrame.contentDocument || siteFrame.contentWindow.document;
+                        if (doc && doc.body && doc.body.innerHTML.trim() === '') showBlocked(url, 'Website Menolak Ditampilkan');
+                        else if (doc) hideBlocked();
+                    } catch (e) { hideBlocked(); }
+                    stopLoading();
+                    setStatus('Selesai', 'text-emerald-500');
+                }, 3000);
+            }
+
+            function openBrowser(url, title = '') {
+                browserPanel.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                if (title) setStatus(`Membuka: ${title}`, 'text-indigo-400', 'ph-globe-simple');
+                loadUrl(normalizeUrl(url));
+            }
+            function closeBrowser() {
+                browserPanel.classList.remove('active');
+                document.body.style.overflow = '';
+                setTimeout(() => { siteFrame.src = 'about:blank'; }, 400);
+                clearTimeout(window._loadTimeout); hideBlocked();
+                history_nav = []; historyIndex = -1; updateNavButtons();
+            }
+
+            function renderQuickLaunch() {
+                quickLaunch.innerHTML = '';
+                links.slice(0, 6).forEach(link => {
+                    const btn = document.createElement('button');
+                    btn.className = 'quick-launch-btn px-3 py-1.5 text-xs whitespace-nowrap flex items-center gap-1.5';
+                    btn.style.color = 'var(--text-secondary)';
+                    btn.style.border = '1px solid var(--border-color)';
+                    btn.innerHTML = `${renderIcon(link.icon, 'icon-sm')} <span>${escapeHtml(link.title)}</span>`;
+                    btn.addEventListener('click', () => { recordOpen(link); loadUrl(link.url); });
+                    quickLaunch.appendChild(btn);
+                });
+            }
+
+            openBrowserBtn.addEventListener('click', () => openBrowser('https://duckduckgo.com', 'DuckDuckGo'));
+            closeBrowserBtn.addEventListener('click', closeBrowser);
+            closeFromBlocked.addEventListener('click', closeBrowser);
+            goBtn.addEventListener('click', () => { const u = normalizeUrl(urlBar.value); if (u) loadUrl(u); });
+            urlBar.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); const u = normalizeUrl(urlBar.value); if (u) loadUrl(u); } });
+            urlBar.addEventListener('focus', () => urlBar.select());
+            backBtn.addEventListener('click', () => { if (historyIndex > 0) { historyIndex--; loadUrl(history_nav[historyIndex], false); updateNavButtons(); } });
+            forwardBtn.addEventListener('click', () => { if (historyIndex < history_nav.length - 1) { historyIndex++; loadUrl(history_nav[historyIndex], false); updateNavButtons(); } });
+            reloadBtn.addEventListener('click', () => { if (siteFrame.src && siteFrame.src !== 'about:blank') loadUrl(siteFrame.src, false); });
+            homeBtn.addEventListener('click', () => loadUrl('https://duckduckgo.com'));
+            openExternalBtn.addEventListener('click', () => { const u = blockedUrl || siteFrame.src; if (u && u !== 'about:blank') window.open(u, '_blank', 'noopener,noreferrer'); });
+            openExternalFromBlocked.addEventListener('click', () => { if (blockedUrl) window.open(blockedUrl, '_blank', 'noopener,noreferrer'); });
+            copyUrlBtn.addEventListener('click', async () => {
+                const u = urlBar.value;
+                if (!u) return;
+                try { await navigator.clipboard.writeText(u); setStatus('URL disalin!', 'text-emerald-400', 'ph-check'); setTimeout(() => setStatus('Siap', 'text-emerald-500'), 1500); }
+                catch (e) { setStatus('Gagal salin', 'text-rose-400', 'ph-x'); }
+            });
+            fullscreenBtn.addEventListener('click', () => { if (!document.fullscreenElement) browserPanel.requestFullscreen?.().catch(() => {}); else document.exitFullscreen?.(); });
+            document.addEventListener('fullscreenchange', () => {
+                fullscreenBtn.innerHTML = document.fullscreenElement ? '<i class="ph ph-corners-in icon-md"></i>' : '<i class="ph ph-corners-out icon-md"></i>';
+            });
+
+            function applyZoom() {
+                siteFrame.style.transform = `scale(${currentZoom / 100})`;
+                siteFrame.style.transformOrigin = 'top left';
+                siteFrame.style.width = `${10000 / currentZoom}%`;
+                siteFrame.style.height = `${10000 / currentZoom}%`;
+                zoomIndicator.textContent = `${currentZoom}%`;
+            }
+            zoomInBtn.addEventListener('click', () => { currentZoom = Math.min(200, currentZoom + 10); applyZoom(); });
+            zoomOutBtn.addEventListener('click', () => { currentZoom = Math.max(50, currentZoom - 10); applyZoom(); });
+            zoomResetBtn.addEventListener('click', () => { currentZoom = 100; applyZoom(); });
+
+            siteFrame.addEventListener('load', () => {
+                clearTimeout(window._loadTimeout);
+                const src = siteFrame.src;
+                if (src && src !== 'about:blank') {
+                    urlBar.value = src;
+                    try {
+                        const doc = siteFrame.contentDocument || siteFrame.contentWindow.document;
+                        if (doc && doc.body && doc.body.innerHTML.trim() === '') showBlocked(src, 'Website Menolak Ditampilkan');
+                        else hideBlocked();
+                    } catch (e) { hideBlocked(); }
+                }
+                stopLoading();
+                setStatus('Selesai', 'text-emerald-500');
+            });
+
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('input', (e) => {
+                const q = e.target.value.toLowerCase().trim();
+                document.querySelectorAll('#cardGrid > div').forEach(card => {
+                    const title = card.querySelector('h3')?.textContent.toLowerCase() || '';
+                    const url = card.querySelector('p')?.textContent.toLowerCase() || '';
+                    card.style.display = (title.includes(q) || url.includes(q)) ? '' : 'none';
+                });
+            });
+
+            let snakeGame = {
+                canvas: null, ctx: null, snake: [], food: {},
+                direction: 'right', nextDirection: 'right',
+                score: 0, best: 0, running: false, gameLoop: null,
+                gridSize: 20, cellSize: 20
+            };
+
+            function initSnakeGame() {
+                const canvas = document.getElementById('snakeCanvas');
+                if (!canvas) return;
+                snakeGame.canvas = canvas;
+                snakeGame.ctx = canvas.getContext('2d');
+                snakeGame.cellSize = canvas.width / snakeGame.gridSize;
+                snakeGame.best = parseInt(localStorage.getItem(KEYS.SNAKE_BEST) || '0');
+                document.getElementById('snakeBest').textContent = snakeGame.best;
+            }
+
+            function resetSnakeGame() {
+                snakeGame.snake = [{ x: 10, y: 10 }, { x: 9, y: 10 }, { x: 8, y: 10 }];
+                snakeGame.direction = 'right';
+                snakeGame.nextDirection = 'right';
+                snakeGame.score = 0;
+                document.getElementById('snakeScore').textContent = '0';
+                spawnFood();
+                drawSnake();
+            }
+
+            function spawnFood() {
+                const gs = snakeGame.gridSize;
+                let attempts = 0;
+                do {
+                    snakeGame.food = { x: Math.floor(Math.random() * gs), y: Math.floor(Math.random() * gs) };
+                    attempts++;
+                } while (snakeGame.snake.some(s => s.x === snakeGame.food.x && s.y === snakeGame.food.y) && attempts < 100);
+            }
+
+            function drawSnake() {
+                const ctx = snakeGame.ctx, cs = snakeGame.cellSize, canvas = snakeGame.canvas;
+                if (!ctx) return;
+                const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+                ctx.fillStyle = isLight ? '#f1f5f9' : '#0b0d10';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.strokeStyle = isLight ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.03)';
+                ctx.lineWidth = 1;
+                for (let i = 0; i <= snakeGame.gridSize; i++) {
+                    ctx.beginPath(); ctx.moveTo(i * cs, 0); ctx.lineTo(i * cs, canvas.height); ctx.stroke();
+                    ctx.beginPath(); ctx.moveTo(0, i * cs); ctx.lineTo(canvas.width, i * cs); ctx.stroke();
+                }
+                const style = getComputedStyle(document.documentElement);
+                const accentText = style.getPropertyValue('--accent-text').trim() || '#D4AF37';
+                snakeGame.snake.forEach((seg, i) => {
+                    const isHead = i === 0;
+                    ctx.fillStyle = isHead ? accentText : accentText + 'aa';
+                    const padding = isHead ? 1 : 2;
+                    ctx.beginPath();
+                    ctx.roundRect(seg.x * cs + padding, seg.y * cs + padding, cs - padding*2, cs - padding*2, isHead ? 6 : 4);
+                    ctx.fill();
+                    if (isHead) {
+                        ctx.fillStyle = isLight ? '#fff' : '#0b0d10';
+                        const eyeSize = 3;
+                        let eye1 = { x: 0, y: 0 }, eye2 = { x: 0, y: 0 };
+                        if (snakeGame.direction === 'right') { eye1 = { x: seg.x * cs + cs - 6, y: seg.y * cs + 5 }; eye2 = { x: seg.x * cs + cs - 6, y: seg.y * cs + cs - 8 }; }
+                        else if (snakeGame.direction === 'left') { eye1 = { x: seg.x * cs + 3, y: seg.y * cs + 5 }; eye2 = { x: seg.x * cs + 3, y: seg.y * cs + cs - 8 }; }
+                        else if (snakeGame.direction === 'up') { eye1 = { x: seg.x * cs + 5, y: seg.y * cs + 3 }; eye2 = { x: seg.x * cs + cs - 8, y: seg.y * cs + 3 }; }
+                        else { eye1 = { x: seg.x * cs + 5, y: seg.y * cs + cs - 6 }; eye2 = { x: seg.x * cs + cs - 8, y: seg.y * cs + cs - 6 }; }
+                        ctx.beginPath(); ctx.arc(eye1.x + eyeSize/2, eye1.y + eyeSize/2, eyeSize, 0, Math.PI * 2); ctx.fill();
+                        ctx.beginPath(); ctx.arc(eye2.x + eyeSize/2, eye2.y + eyeSize/2, eyeSize, 0, Math.PI * 2); ctx.fill();
+                    }
+                });
+                ctx.fillStyle = '#F5D77A';
+                ctx.beginPath();
+                ctx.arc(snakeGame.food.x * cs + cs/2, snakeGame.food.y * cs + cs/2, cs/2 - 2, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = 'rgba(255,255,255,0.4)';
+                ctx.beginPath();
+                ctx.arc(snakeGame.food.x * cs + cs/2 - 3, snakeGame.food.y * cs + cs/2 - 3, 2, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            function updateSnake() {
+                snakeGame.direction = snakeGame.nextDirection;
+                const head = { ...snakeGame.snake[0] };
+                if (snakeGame.direction === 'right') head.x++;
+                else if (snakeGame.direction === 'left') head.x--;
+                else if (snakeGame.direction === 'up') head.y--;
+                else if (snakeGame.direction === 'down') head.y++;
+                if (head.x < 0 || head.x >= snakeGame.gridSize || head.y < 0 || head.y >= snakeGame.gridSize) { gameOverSnake(); return; }
+                if (snakeGame.snake.some(s => s.x === head.x && s.y === head.y)) { gameOverSnake(); return; }
+                snakeGame.snake.unshift(head);
+                if (head.x === snakeGame.food.x && head.y === snakeGame.food.y) {
+                    snakeGame.score += 10;
+                    document.getElementById('snakeScore').textContent = snakeGame.score;
+                    if (snakeGame.score > snakeGame.best) {
+                        snakeGame.best = snakeGame.score;
+                        document.getElementById('snakeBest').textContent = snakeGame.best;
+                        localStorage.setItem(KEYS.SNAKE_BEST, snakeGame.best.toString());
+                    }
+                    spawnFood();
+                } else snakeGame.snake.pop();
+                drawSnake();
+            }
+
+            function gameOverSnake() {
+                snakeGame.running = false;
+                clearInterval(snakeGame.gameLoop);
+                const ctx = snakeGame.ctx, canvas = snakeGame.canvas;
+                ctx.fillStyle = 'rgba(0,0,0,0.75)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#F5D77A';
+                ctx.font = 'bold 28px Inter, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('Game Over', canvas.width/2, canvas.height/2 - 10);
+                ctx.font = '16px Inter, sans-serif';
+                ctx.fillStyle = '#D4AF37';
+                ctx.fillText(`Skor: ${snakeGame.score}`, canvas.width/2, canvas.height/2 + 25);
+                ctx.font = '12px Inter, sans-serif';
+                ctx.fillStyle = '#94a3b8';
+                ctx.fillText('Klik "Mulai" untuk main lagi', canvas.width/2, canvas.height/2 + 55);
+                document.getElementById('startSnakeBtn').innerHTML = '<i class="ph ph-arrow-counter-clockwise icon-md"></i> Main Lagi';
+            }
+
+            function startSnake() {
+                resetSnakeGame();
+                snakeGame.running = true;
+                if (snakeGame.gameLoop) clearInterval(snakeGame.gameLoop);
+                snakeGame.gameLoop = setInterval(updateSnake, 120);
+                document.getElementById('startSnakeBtn').innerHTML = '<i class="ph ph-arrow-counter-clockwise icon-md"></i> Restart';
+            }
+
+            function handleSnakeKey(e) {
+                const container = document.getElementById('snakeContainer');
+                if (!container.classList.contains('show')) return;
+                if (!snakeGame.running) return;
+                const key = e.key.toLowerCase();
+                const map = { 'arrowup': 'up', 'w': 'up', 'arrowdown': 'down', 's': 'down', 'arrowleft': 'left', 'a': 'left', 'arrowright': 'right', 'd': 'right' };
+                const dir = map[key];
+                if (!dir) return;
+                e.preventDefault();
+                const opposite = { 'up': 'down', 'down': 'up', 'left': 'right', 'right': 'left' };
+                if (dir !== opposite[snakeGame.direction]) snakeGame.nextDirection = dir;
+            }
+
+            const konamiSequence = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+            let konamiIndex = 0;
+            document.addEventListener('keydown', (e) => {
+                if (e.key === konamiSequence[konamiIndex]) {
+                    konamiIndex++;
+                    if (konamiIndex === konamiSequence.length) { konamiIndex = 0; triggerKonami(); }
+                } else konamiIndex = 0;
+            });
+
+            function triggerKonami() {
+                document.body.classList.add('konami-active');
+                setTimeout(() => document.body.classList.remove('konami-active'), 2000);
+                for (let i = 0; i < 50; i++) {
+                    setTimeout(() => {
+                        const conf = document.createElement('div');
+                        conf.style.cssText = `
+                            position: fixed; top: -10px; left: ${Math.random() * 100}vw;
+                            width: 8px; height: 8px;
+                            background: ${['#F5D77A','#D4AF37','#B8860B','#FFF3B0'][Math.floor(Math.random()*4)]};
+                            border-radius: 50%; z-index: 9999; pointer-events: none;
+                            animation: fall 3s linear forwards;
+                        `;
+                        document.body.appendChild(conf);
+                        setTimeout(() => conf.remove(), 3000);
+                    }, i * 30);
+                }
+                if (!document.getElementById('konamiStyle')) {
+                    const style = document.createElement('style');
+                    style.id = 'konamiStyle';
+                    style.textContent = '@keyframes fall { to { transform: translateY(100vh) rotate(720deg); opacity: 0; } }';
+                    document.head.appendChild(style);
+                }
+                showToast('🎉 Konami Code aktif!');
+            }
+
+            const settingsOverlay = document.getElementById('settingsOverlay');
+            const settingsBtn = document.getElementById('settingsBtn');
+            const closeSettingsBtn = document.getElementById('closeSettingsBtn');
+            const themeColorPicker = document.getElementById('themeColorPicker');
+            const toggleLockBtn = document.getElementById('toggleLockBtn');
+            const changePinBtn = document.getElementById('changePinBtn');
+            const exportBtn = document.getElementById('exportBtn');
+            const importBtn = document.getElementById('importBtn');
+            const importFile = document.getElementById('importFile');
+            const resetAllBtn = document.getElementById('resetAllBtn');
+            const pinSetupOverlay = document.getElementById('pinSetupOverlay');
+            const cancelPinSetup = document.getElementById('cancelPinSetup');
+            const pinSetupOkBtn = document.getElementById('pinSetupOkBtn');
+            const autoThemeToggle = document.getElementById('autoThemeToggle');
+            const particlesToggle = document.getElementById('particlesToggle');
+
+            function renderThemeColors() {
+                themeColorPicker.innerHTML = '';
+                Object.entries(THEMES).forEach(([key, t]) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'theme-color-btn' + (key === currentTheme ? ' active' : '');
+                    btn.dataset.theme = key;
+                    btn.title = t.name;
+                    btn.style.background = `linear-gradient(135deg, ${t.c1}, ${t.c2})`;
+                    btn.addEventListener('click', () => { applyTheme(key); showToast(`Tema: ${t.name}`); });
+                    themeColorPicker.appendChild(btn);
+                });
+            }
+
+            settingsBtn.addEventListener('click', () => {
+                renderThemeColors();
+                updateLockUI();
+                updateStats();
+                autoThemeToggle.classList.toggle('active', currentMode === 'auto');
+                particlesToggle.classList.toggle('active', settings.particles);
+                settingsOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+            closeSettingsBtn.addEventListener('click', () => { settingsOverlay.classList.remove('active'); document.body.style.overflow = ''; });
+            settingsOverlay.addEventListener('click', (e) => { if (e.target === settingsOverlay) { settingsOverlay.classList.remove('active'); document.body.style.overflow = ''; } });
+
+            const themeToggleBtn = document.getElementById('themeToggleBtn');
+            themeToggleBtn.addEventListener('click', () => {
+                const modes = ['dark', 'light', 'auto'];
+                const idx = modes.indexOf(currentMode);
+                const next = modes[(idx + 1) % modes.length];
+                applyMode(next);
+                showToast(`Tema: ${next === 'auto' ? 'Auto' : next === 'light' ? 'Terang' : 'Gelap'}`);
+            });
+
+            autoThemeToggle.addEventListener('click', () => {
+                const newMode = currentMode === 'auto' ? 'dark' : 'auto';
+                applyMode(newMode);
+                autoThemeToggle.classList.toggle('active', newMode === 'auto');
+                showToast(newMode === 'auto' ? 'Auto mode aktif' : 'Auto mode nonaktif');
+            });
+
+            particlesToggle.addEventListener('click', () => {
+                settings.particles = !settings.particles;
+                particlesToggle.classList.toggle('active', settings.particles);
+                saveSettings();
+                initParticles();
+                showToast(settings.particles ? 'Partikel aktif' : 'Partikel nonaktif');
+            });
+
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+                if (currentMode === 'auto') applyMode('auto');
+            });
+
+            toggleLockBtn.addEventListener('click', () => {
+                if (lockData.enabled) {
+                    if (confirm('Matikan kunci aplikasi?')) {
+                        lockData.enabled = false;
+                        lockData.pin = null;
+                        saveLock();
+                        updateLockUI();
+                        showToast('Kunci dimatikan');
+                    }
+                } else openPinSetup('set');
+            });
+
+            changePinBtn.addEventListener('click', () => openPinSetup('change'));
+            cancelPinSetup.addEventListener('click', () => { pinSetupOverlay.classList.remove('active'); document.body.style.overflow = ''; });
+            pinSetupOkBtn.addEventListener('click', handlePinSetupConfirm);
+
+            exportBtn.addEventListener('click', () => {
+                const data = { links, stats, history, theme: currentTheme, mode: currentMode, settings, exportedAt: new Date().toISOString(), version: 5 };
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `joh4nity-backup-${new Date().toISOString().split('T')[0]}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+                showToast('Export berhasil!');
+            });
+
+            importBtn.addEventListener('click', () => importFile.click());
+            importFile.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    try {
+                        const data = JSON.parse(ev.target.result);
+                        if (data.links) { links = data.links.map(l => ({ ...l, notes: l.notes || '' })); saveLinks(); renderCards(); }
+                        if (data.stats) { stats = data.stats; saveStats(); }
+                        if (data.history) { history = data.history; saveHistory(); }
+                        if (data.theme) applyTheme(data.theme);
+                        if (data.mode) applyMode(data.mode);
+                        if (data.settings) { settings = { ...settings, ...data.settings }; saveSettings(); }
+                        showToast('Import berhasil!');
+                    } catch (err) { showToast('File tidak valid', 'error'); }
+                };
+                reader.readAsText(file);
+                e.target.value = '';
+            });
+
+            resetAllBtn.addEventListener('click', () => {
+                if (confirm('⚠️ Hapus SEMUA data (link, riwayat, statistik, PIN, pengaturan)?')) {
+                    Object.values(KEYS).forEach(k => localStorage.removeItem(k));
+                    location.reload();
+                }
+            });
+
+            const toggleHistoryBtn = document.getElementById('toggleHistoryBtn');
+            const historyPanel = document.getElementById('historyPanel');
+            const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+
+            toggleHistoryBtn.addEventListener('click', () => {
+                historyPanel.classList.toggle('hidden');
+                if (!historyPanel.classList.contains('hidden')) renderHistory();
+            });
+            clearHistoryBtn.addEventListener('click', () => {
+                if (confirm('Bersihkan riwayat?')) {
+                    history = [];
+                    saveHistory();
+                    showToast('Riwayat dibersihkan');
+                }
+            });
+
+            const playGameBtn = document.getElementById('playGameBtn');
+            const snakeContainer = document.getElementById('snakeContainer');
+            const closeGameBtn = document.getElementById('closeGameBtn');
+            const startSnakeBtn = document.getElementById('startSnakeBtn');
+
+            playGameBtn.addEventListener('click', () => {
+                snakeContainer.classList.toggle('show');
+                if (snakeContainer.classList.contains('show')) {
+                    initSnakeGame();
+                    resetSnakeGame();
+                    document.getElementById('startSnakeBtn').innerHTML = '<i class="ph ph-play icon-md"></i> Mulai';
+                }
+            });
+            closeGameBtn.addEventListener('click', () => {
+                snakeContainer.classList.remove('show');
+                if (snakeGame.gameLoop) clearInterval(snakeGame.gameLoop);
+                snakeGame.running = false;
+            });
+            startSnakeBtn.addEventListener('click', startSnake);
+            document.addEventListener('keydown', handleSnakeKey);
+
+            let deferredPrompt = null;
+            const installBanner = document.getElementById('installBanner');
+            const installBtn = document.getElementById('installBtn');
+            const dismissInstallBtn = document.getElementById('dismissInstallBtn');
+
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                if (!localStorage.getItem('joh4nity_install_dismissed')) installBanner.classList.remove('hidden');
+            });
+
+            installBtn.addEventListener('click', async () => {
+                if (!deferredPrompt) return;
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') showToast('🎉 Joh4nity berhasil di-install!');
+                deferredPrompt = null;
+                installBanner.classList.add('hidden');
+            });
+
+            dismissInstallBtn.addEventListener('click', () => {
+                installBanner.classList.add('hidden');
+                localStorage.setItem('joh4nity_install_dismissed', '1');
+            });
+
+            window.addEventListener('appinstalled', () => {
+                installBanner.classList.add('hidden');
+                showToast('Aplikasi terinstall!');
+            });
+
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('service-worker.js')
+                        .then(reg => console.log('SW registered'))
+                        .catch(err => console.log('SW error:', err));
+                });
+            }
+
+            document.addEventListener('keydown', (e) => {
+                if (isLocked) return;
+                if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                    e.preventDefault();
+                    if (!browserPanel.classList.contains('active') && !settingsOverlay.classList.contains('active')) searchInput.focus();
+                    else if (browserPanel.classList.contains('active')) { urlBar.focus(); urlBar.select(); }
+                }
+                if (e.key === 'Escape') {
+                    if (overlay.classList.contains('active')) closeOverlay();
+                    else if (deleteOverlay.classList.contains('active')) closeDeleteOverlay();
+                    else if (settingsOverlay.classList.contains('active')) { settingsOverlay.classList.remove('active'); document.body.style.overflow = ''; }
+                    else if (pinSetupOverlay.classList.contains('active')) { pinSetupOverlay.classList.remove('active'); document.body.style.overflow = ''; }
+                    else if (browserPanel.classList.contains('active')) closeBrowser();
+                }
+            });
+
+            function init() {
+                loadAllData();
+                initParticles();
+                renderCards();
+                renderQuickLaunch();
+                updateStats();
+                renderHistory();
+                updateNavButtons();
+                applyZoom();
+                setupLockScreen();
+                setupPinSetup();
+                updateLockUI();
+                initSnakeGame();
+                if (window._renderLockDots) window._renderLockDots();
+                if (window._renderLockKeypad) window._renderLockKeypad();
+                if (window._renderSetupDots) window._renderSetupDots();
+                if (window._renderSetupKeypad) window._renderSetupKeypad();
+                if (lockData.enabled && lockData.pin) setTimeout(() => showLockScreen(), 300);
+            }
+
+            init();
+        })();
+    </script>
+</body>
+</html>
